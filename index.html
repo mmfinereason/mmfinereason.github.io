@@ -1,0 +1,2401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="MMFineReason: A Large-Scale Multimodal Reasoning Dataset with Long-Form Chain-of-Thought Supervision">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MMFineReason | Multimodal Reasoning Dataset</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    :root {
+      --color-bg: #ffffff;
+      --color-bg-secondary: #f8f9fc;
+      --color-bg-tertiary: #f0f2f7;
+      --color-text: #1a1a2e;
+      --color-text-muted: #64748b;
+      --color-accent: #6366f1;
+      --color-accent-hover: #4f46e5;
+      --color-accent-dim: rgba(99, 102, 241, 0.08);
+      --color-orange: #f97316;
+      --color-purple: #8b5cf6;
+      --color-blue: #3b82f6;
+      --color-pink: #ec4899;
+      --color-yellow: #eab308;
+      --color-border: rgba(0, 0, 0, 0.08);
+      --font-display: 'Fraunces', serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 32px;
+      --shadow-glow: 0 8px 40px rgba(99, 102, 241, 0.15);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.02;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .container-wide {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-accent);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-accent);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 120px 0 80px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139, 92, 246, 0.08), transparent),
+        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(249, 115, 22, 0.06), transparent);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black, transparent);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--color-accent-dim);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-accent);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--color-accent), var(--color-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(18px, 2.5vw, 22px);
+      color: var(--color-text-muted);
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    .hero-authors {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    .hero-authors .author {
+      font-size: 15px;
+      color: var(--color-text);
+    }
+
+    .hero-authors .author sup {
+      color: var(--color-accent);
+      font-size: 11px;
+    }
+
+    .hero-affiliations-inline {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease-out 0.35s both;
+    }
+
+    .hero-affiliations-inline sup {
+      color: var(--color-accent);
+    }
+
+    .hero-figure {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .figure-placeholder {
+      background: var(--color-bg-secondary);
+      border: 2px dashed rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 60px 40px;
+      text-align: center;
+      color: var(--color-text-muted);
+    }
+
+    .figure-placeholder i {
+      font-size: 48px;
+      opacity: 0.3;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .figure-placeholder code {
+      background: rgba(0,0,0,0.05);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .figure-caption {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-bg-secondary);
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-affiliations {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--color-border);
+      animation: fadeInUp 0.6s ease-out 0.5s both;
+    }
+
+    .hero-affiliations-label {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 20px;
+    }
+
+    .hero-affiliations-list {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .affiliation {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--color-text-muted);
+    }
+
+    .affiliation-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--color-bg-tertiary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-alt {
+      background: var(--color-bg-secondary);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 18px;
+      color: var(--color-text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Abstract Section */
+    .abstract-content {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .abstract-content p {
+      margin-bottom: 24px;
+      color: rgba(26, 26, 46, 0.85);
+    }
+
+    .abstract-content strong {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .abstract-highlight {
+      background: var(--color-bg-tertiary);
+      border-left: 3px solid var(--color-accent);
+      padding: 24px 32px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 32px 0;
+    }
+
+    /* Key Findings */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .finding-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
+    }
+
+    .finding-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .finding-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--color-accent-dim);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .finding-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .finding-desc {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* Pipeline Section */
+    .pipeline-visual {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .pipeline-placeholder {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+      border: 2px dashed rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 80px 40px;
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    .pipeline-placeholder-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .pipeline-stages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 900px) {
+      .pipeline-stages {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .pipeline-stages {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pipeline-stage {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      text-align: left;
+      box-shadow: var(--shadow-card);
+    }
+
+    .pipeline-stage::before {
+      content: attr(data-step);
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    .pipeline-stage h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
+
+    .pipeline-stage ul {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      padding-left: 16px;
+    }
+
+    .pipeline-stage li {
+      margin-bottom: 6px;
+    }
+
+    /* Dataset Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-card:hover {
+      border-color: var(--color-accent);
+      transform: scale(1.02);
+    }
+
+    .stat-card-value {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+    }
+
+    /* Domain Distribution */
+    .distribution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .distribution-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .distribution-chart {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+    }
+
+    .distribution-chart h4 {
+      font-size: 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chart-placeholder {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+      border: 2px dashed rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 14px;
+    }
+
+    .domain-list {
+      list-style: none;
+    }
+
+    .domain-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .domain-item:last-child {
+      border-bottom: none;
+    }
+
+    .domain-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+    }
+
+    .domain-name {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .domain-percent {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--color-text-muted);
+    }
+
+    .domain-bar {
+      width: 100px;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .domain-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease-out;
+    }
+
+    /* Benchmark Results */
+    .benchmark-table-wrapper {
+      overflow-x: auto;
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      margin-top: 48px;
+    }
+
+    .benchmark-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .benchmark-table th,
+    .benchmark-table td {
+      padding: 16px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .benchmark-table th {
+      background: var(--color-bg-secondary);
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+    }
+
+    .benchmark-table th:first-child,
+    .benchmark-table td:first-child {
+      text-align: left;
+      padding-left: 28px;
+    }
+
+    .benchmark-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .benchmark-table tr.highlight {
+      background: rgba(99, 102, 241, 0.06);
+    }
+
+    .benchmark-table tr.highlight td {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .model-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .model-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 8px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-radius: 4px;
+    }
+
+    .best-score {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* Demo Section */
+    .demo-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      padding: 12px 24px;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
+    }
+
+    .demo-btn:hover {
+      border-color: rgba(0, 0, 0, 0.15);
+      background: var(--color-bg-secondary);
+    }
+
+    .demo-btn.active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    .demo-container {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 32px;
+      min-height: 600px;
+    }
+
+    @media (max-width: 1000px) {
+      .demo-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-left {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .demo-image-box {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .demo-image-placeholder {
+      color: var(--color-text-muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .demo-image-placeholder i {
+      font-size: 48px;
+      opacity: 0.3;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .demo-qa-box {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      flex: 1;
+    }
+
+    .demo-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 8px;
+    }
+
+    .demo-question {
+      font-size: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .demo-answer {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+
+    .demo-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .demo-panel {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .demo-panel-header {
+      padding: 16px 20px;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-panel-header i {
+      color: var(--color-accent);
+    }
+
+    .demo-panel-content {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      line-height: 1.7;
+      color: var(--color-text-muted);
+    }
+
+    /* Comparison Section */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .comparison-card {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      text-align: center;
+    }
+
+    .comparison-card h4 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .comparison-card .value {
+      font-family: var(--font-mono);
+      font-size: 42px;
+      font-weight: 700;
+      margin: 16px 0;
+    }
+
+    .comparison-card.ours {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-glow);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+    }
+
+    .comparison-card.ours .value {
+      color: var(--color-accent);
+    }
+
+    .comparison-card .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--color-bg-secondary);
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    /* Image Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gallery-item {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    .gallery-image {
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .gallery-image i {
+      font-size: 36px;
+      opacity: 0.3;
+    }
+
+    .gallery-caption {
+      padding: 20px;
+      font-size: 14px;
+      color: var(--color-text-muted);
+    }
+
+    /* Results Summary */
+    .results-summary {
+      background: var(--color-bg-tertiary);
+      border-left: 4px solid var(--color-accent);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 24px 32px;
+      margin-top: 32px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .results-summary p {
+      margin: 0;
+    }
+
+    /* Category Stats Section */
+    .category-stats-section {
+      margin-top: 48px;
+    }
+
+    .subsection-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .subsection-desc {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+    }
+
+    .category-tables {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .category-tables {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .category-table-card {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .category-table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--color-bg-tertiary);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .category-badge {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    .category-badge.stem {
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--color-accent);
+    }
+
+    .category-badge.natural {
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--color-purple);
+    }
+
+    .category-total {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .category-table-body {
+      padding: 8px 0;
+    }
+
+    .category-table-body.scrollable {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .category-table-body.scrollable::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .category-table-body.scrollable::-webkit-scrollbar-track {
+      background: var(--color-bg-tertiary);
+    }
+
+    .category-table-body.scrollable::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: 3px;
+    }
+
+    .category-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .category-row:last-child {
+      border-bottom: none;
+    }
+
+    .category-row.sub {
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    .category-value {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    /* Stage Badges */
+    .stage-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .stage-badge.base {
+      background: rgba(100, 116, 139, 0.1);
+      color: var(--color-text-muted);
+    }
+
+    .stage-badge.sft {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--color-blue);
+    }
+
+    .stage-badge.rl {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--color-accent);
+    }
+
+    .delta-positive {
+      color: #10b981;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .model-section {
+      background: var(--color-bg);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-muted);
+      text-align: left !important;
+      padding: 10px 28px !important;
+    }
+
+    .section-divider td {
+      border-bottom: none;
+    }
+
+    /* Ablation Block */
+    .ablation-block {
+      margin-bottom: 64px;
+    }
+
+    .ablation-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .ablation-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--color-accent);
+      display: inline-block;
+    }
+
+    .ablation-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .ablation-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ablation-figure {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .ablation-figure .figure-placeholder {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+      border: 2px dashed rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .ablation-figure .figure-placeholder i {
+      font-size: 36px;
+      opacity: 0.4;
+      margin-bottom: 12px;
+    }
+
+    .ablation-text {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .ablation-text p {
+      margin-bottom: 16px;
+    }
+
+    .ablation-text ul {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    .ablation-text li {
+      margin-bottom: 10px;
+      color: rgba(26, 26, 46, 0.85);
+    }
+
+    .ablation-text li strong {
+      color: var(--color-accent);
+    }
+
+    /* Citation */
+    .citation-box {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      position: relative;
+    }
+
+    .citation-code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--color-text-muted);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .citation-copy {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .citation-copy:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--color-border);
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    .footer-links a {
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-accent);
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--color-bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-authors {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .section {
+        padding: 60px 0;
+      }
+
+      .ablation-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">MMFineReason</a>
+      <ul class="nav-links">
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#pipeline">Pipeline</a></li>
+        <li><a href="#dataset">Dataset</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#ablation">Ablation</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#citation">Citation</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span>January 2026 • NeurIPS Submission</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="highlight">MMFineReason</span>
+      </h1>
+      <p class="hero-subtitle">
+        A Large-Scale Dataset for Fine-Grained Multimodal Reasoning with Long-Form Chain-of-Thought Supervision
+      </p>
+      <!-- Authors -->
+      <div class="hero-authors">
+        <span class="author">Conghui He<sup>1*</sup></span>,
+        <span class="author">Author Name<sup>1</sup></span>,
+        <span class="author">Author Name<sup>1</sup></span>,
+        <span class="author">Author Name<sup>2</sup></span>,
+        <span class="author">Author Name<sup>1</sup></span>,
+        <span class="author">Author Name<sup>2</sup></span>
+      </div>
+      <div class="hero-affiliations-inline">
+        <span><sup>1</sup>Shanghai AI Laboratory, OpenDataLab</span>
+        <span><sup>2</sup>Tsinghua University</span>
+      </div>
+
+      <!-- Figure 1: Model Comparison -->
+      <div class="hero-figure">
+        <img src="static/images/model_compare.png" alt="Benchmark results on mathematical reasoning and general understanding tasks" style="width: 100%; border-radius: 12px;">
+        <p class="figure-caption"><strong>Figure 1:</strong> Benchmark results on mathematical reasoning and general understanding tasks. MMFineReason(MFR)-8B demonstrates strong performance relative to thinking models with significantly more parameters.</p>
+      </div>
+
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">
+          <i class="ai ai-arxiv"></i>
+          <span>arXiv Paper</span>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <i class="fab fa-github"></i>
+          <span>GitHub Code</span>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <span>🤗</span>
+          <span>Dataset & Models</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract Section -->
+  <section id="abstract" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Overview</span>
+        <h2 class="section-title">Abstract</h2>
+      </div>
+      <div class="abstract-content">
+        <p>
+          Recent advances in Vision Language Models (VLMs) have driven significant progress in visual reasoning. However, open-source multimodal models still lag behind proprietary systems, largely due to the lack of high-quality reasoning data. Existing datasets offer limited coverage of challenging domains such as <strong>STEM diagrams</strong> and <strong>visual puzzles</strong>, and lack consistent, long-form Chain-of-Thought (CoT) annotations essential for eliciting strong reasoning capabilities.
+        </p>
+        <div class="abstract-highlight">
+          <p style="margin: 0;">
+            To bridge this gap, we introduce <strong>MMFineReason</strong>, a large-scale multimodal reasoning dataset comprising <strong>2.3M samples</strong> and <strong>8.8B solution tokens</strong>, featuring high-quality reasoning annotations distilled from <strong>Qwen3-VL-235B-A22B-Thinking</strong>.
+          </p>
+        </div>
+        <p>
+          Our dataset is constructed through a systematic four-stage pipeline: large-scale data collection and standardization, filtering to retain high-value reasoning samples, CoT rationale generation, and rigorous multi-dimensional quality verification. The resulting dataset spans <strong>STEM problems, visual puzzles, games, and complex diagrams</strong>, with each sample annotated with detailed, visually grounded reasoning traces.
+        </p>
+        <p>
+          We fine-tune Qwen3-VL-Instruct on MMFineReason to develop <strong>MMFineReason-2B/4B/8B</strong>. Our models establish new state-of-the-art results for their size class. Notably, <strong>MMFineReason-4B surpasses Qwen3-VL-8B-Thinking</strong>, and <strong>MMFineReason-8B outperforms Qwen3-VL-30B-A3B-Thinking</strong> while approaching Qwen3-VL-32B-Thinking, demonstrating remarkable parameter efficiency.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline Section -->
+  <section id="pipeline" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Methodology</span>
+        <h2 class="section-title">Dataset Construction Pipeline</h2>
+        <p class="section-desc">A systematic four-stage pipeline ensuring data diversity and high-quality reasoning annotations</p>
+      </div>
+
+      <!-- Pipeline Visual -->
+      <div class="pipeline-visual">
+        <img src="static/images/pipeline_detailed.png" alt="Dataset Construction Pipeline" style="width: 100%; border-radius: 16px;">
+      </div>
+
+      <!-- Pipeline Stages -->
+      <div class="pipeline-stages">
+        <div class="pipeline-stage" data-step="01">
+          <h4>Data Collection & Cleaning</h4>
+          <ul>
+            <li>Aggregate diverse multimodal datasets including FineVision, BMMR, Euclid30K, GameQA-140K</li>
+            <li>Language standardization and translation</li>
+            <li>Noise removal and instruction refinement</li>
+            <li>Task suitability filtering</li>
+          </ul>
+        </div>
+        <div class="pipeline-stage" data-step="02">
+          <h4>High-Quality Annotation</h4>
+          <ul>
+            <li>Distill CoT from Qwen3-VL-235B-A22B-Thinking</li>
+            <li>4-phase framework: Extraction → Setup → Execution → Validation</li>
+            <li>Visual grounding emphasis</li>
+            <li>Dense captioning with 100% coverage</li>
+          </ul>
+        </div>
+        <div class="pipeline-stage" data-step="03">
+          <h4>Quality Verification</h4>
+          <ul>
+            <li>Template and length validation (min 100 words)</li>
+            <li>N-gram de-duplication (n=50, f=3)</li>
+            <li>Correctness verification against ground truth</li>
+            <li>Consistency analysis</li>
+          </ul>
+        </div>
+        <div class="pipeline-stage" data-step="04">
+          <h4>Difficulty Filtering</h4>
+          <ul>
+            <li>Qwen3-VL-4B-Thinking as difficulty proxy</li>
+            <li>Retain only challenging samples</li>
+            <li>Remove trivial/redundant instances</li>
+            <li>Optimize training efficiency</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dataset Statistics Section -->
+  <section id="dataset" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Statistics</span>
+        <h2 class="section-title">Dataset Overview</h2>
+        <p class="section-desc">Comprehensive statistics and domain distribution of MMFineReason</p>
+      </div>
+
+      <!-- Figure 5: Dataset Composition -->
+      <div class="figure-container">
+        <img src="static/images/composition_sunburst.png" alt="Dataset Composition of MMFineReason-SFT" style="width: 100%; max-width: 700px; display: block; margin: 0 auto; border-radius: 12px;">
+        <p class="figure-caption"><strong>Figure 5:</strong> Dataset Composition of MMFineReason-SFT. The outer ring represents the proportion of major categories, and the inner ring shows the distribution of specific datasets. The actual data distribution is dominated by Mathematics (79.4%), followed by Science (13.8%), Puzzle/Game (4.6%), and General/OCR (2.2%).</p>
+      </div>
+
+      <!-- Table 2: Image Category Statistics -->
+      <div class="category-stats-section">
+        <h3 class="subsection-title">Image Category Distribution</h3>
+        <p class="subsection-desc">Table 2: STEM/Diagrammatic images dominate (97.8%), with diverse natural image coverage.</p>
+        <div class="category-tables">
+          <div class="category-table-card">
+            <div class="category-table-header">
+              <span class="category-badge stem">STEM / Diagrammatic</span>
+              <span class="category-total">2,231,892 images</span>
+            </div>
+            <div class="category-table-body scrollable">
+              <div class="category-row"><span>Geometric Diagram</span><span class="category-value">48.94%</span></div>
+              <div class="category-row"><span>Mathematical Plot / Chart</span><span class="category-value">19.60%</span></div>
+              <div class="category-row"><span>Puzzle / Logic Diagram</span><span class="category-value">7.64%</span></div>
+              <div class="category-row"><span>Diagram / Flowchart</span><span class="category-value">5.01%</span></div>
+              <div class="category-row"><span>Table / Matrix</span><span class="category-value">4.16%</span></div>
+              <div class="category-row"><span>Textbook Illustration</span><span class="category-value">3.44%</span></div>
+              <div class="category-row"><span>Abstract Mathematical</span><span class="category-value">3.13%</span></div>
+              <div class="category-row"><span>Spatial Reasoning Scene</span><span class="category-value">2.42%</span></div>
+              <div class="category-row"><span>Physics / Mechanics</span><span class="category-value">2.26%</span></div>
+              <div class="category-row"><span>Biological Structure</span><span class="category-value">0.98%</span></div>
+              <div class="category-row"><span>Experimental Setup</span><span class="category-value">0.66%</span></div>
+              <div class="category-row"><span>Circuit / Network</span><span class="category-value">0.59%</span></div>
+              <div class="category-row"><span>Geological / Earth Science</span><span class="category-value">0.57%</span></div>
+              <div class="category-row"><span>Astronomy / Space</span><span class="category-value">0.40%</span></div>
+              <div class="category-row"><span>Molecular / Chemical</span><span class="category-value">0.21%</span></div>
+            </div>
+          </div>
+          <div class="category-table-card">
+            <div class="category-table-header">
+              <span class="category-badge natural">Natural Image</span>
+              <span class="category-total">51,040 images</span>
+            </div>
+            <div class="category-table-body scrollable">
+              <div class="category-row"><span>Urban / Street Scene</span><span class="category-value">16.52%</span></div>
+              <div class="category-row"><span>Indoor / Interior Scene</span><span class="category-value">15.35%</span></div>
+              <div class="category-row"><span>Document / Text Image</span><span class="category-value">15.33%</span></div>
+              <div class="category-row"><span>Sports / High-Motion</span><span class="category-value">11.29%</span></div>
+              <div class="category-row"><span>Human Portrait / Activity</span><span class="category-value">11.29%</span></div>
+              <div class="category-row"><span>Animal / Wildlife Scene</span><span class="category-value">7.71%</span></div>
+              <div class="category-row"><span>Natural Landscape</span><span class="category-value">6.55%</span></div>
+              <div class="category-row"><span>Food / Beverage Item</span><span class="category-value">5.95%</span></div>
+              <div class="category-row"><span>Vehicle / Machinery</span><span class="category-value">4.85%</span></div>
+              <div class="category-row"><span>Product / Still Life</span><span class="category-value">3.74%</span></div>
+              <div class="category-row"><span>Artwork / Illustration</span><span class="category-value">1.19%</span></div>
+              <div class="category-row"><span>Technical / Medical</span><span class="category-value">0.22%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reasoning Depth Comparison -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Comparison</span>
+        <h2 class="section-title">Reasoning Depth Analysis</h2>
+        <p class="section-desc">MMFineReason provides significantly deeper reasoning traces than existing datasets</p>
+      </div>
+
+      <!-- Table 3: Token Length Statistics -->
+      <div class="table-section">
+        <h3 class="table-title">Table 3: Comparison of Token Length Statistics Across Datasets</h3>
+        <p class="table-desc">We report the distribution metrics (mean, median, and percentiles) for reasoning chains (CoT) and image captions.</p>
+        <div class="benchmark-table-wrapper">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Type</th>
+                <th>Count</th>
+                <th>Total Tokens</th>
+                <th>Mean</th>
+                <th>Median</th>
+                <th>Std Dev</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>P25</th>
+                <th>P75</th>
+                <th>P95</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="highlight">
+                <td><strong>MMFineReason (Ours)</strong></td>
+                <td>CoT</td>
+                <td>2,286,130</td>
+                <td>8,785,423,669</td>
+                <td><strong>3,842.92</strong></td>
+                <td>2,818.0</td>
+                <td>2,864.68</td>
+                <td>377</td>
+                <td>19,044</td>
+                <td>1,917.0</td>
+                <td>4,703.0</td>
+                <td>10,271.0</td>
+              </tr>
+              <tr>
+                <td>OpenMMReasoner</td>
+                <td>CoT</td>
+                <td>874,357</td>
+                <td>590,096,263</td>
+                <td>674.89</td>
+                <td>180.0</td>
+                <td>1,477.53</td>
+                <td>26</td>
+                <td>16,483</td>
+                <td>102.0</td>
+                <td>464.0</td>
+                <td>3,318.0</td>
+              </tr>
+              <tr>
+                <td>HoneyBee</td>
+                <td>CoT</td>
+                <td>2,481,229</td>
+                <td>2,636,405,079</td>
+                <td>1,062.54</td>
+                <td>972.0</td>
+                <td>428.00</td>
+                <td>203</td>
+                <td>7,190</td>
+                <td>745.0</td>
+                <td>1,298.0</td>
+                <td>1,931.0</td>
+              </tr>
+              <tr class="highlight">
+                <td><strong>MMFineReason (Ours)</strong></td>
+                <td>Caption</td>
+                <td>2,286,130</td>
+                <td>1,421,853,204</td>
+                <td><strong>621.95</strong></td>
+                <td>592.0</td>
+                <td>190.97</td>
+                <td>1</td>
+                <td>5,986</td>
+                <td>501.0</td>
+                <td>704.0</td>
+                <td>946.0</td>
+              </tr>
+              <tr>
+                <td>HoneyBee</td>
+                <td>Caption</td>
+                <td>1,439,921</td>
+                <td>431,096,653</td>
+                <td>299.39</td>
+                <td>264.0</td>
+                <td>157.99</td>
+                <td>21</td>
+                <td>2,739</td>
+                <td>201.0</td>
+                <td>350.0</td>
+                <td>598.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Bold values indicate the highest statistics, highlighting the significant reasoning depth of MMFineReason. MMFineReason achieves an average CoT length of <strong>3,842 tokens</strong> — approximately <strong>3.6× longer</strong> than HoneyBee and <strong>5.7× longer</strong> than OpenMMReasoner.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmark Results Section -->
+  <section id="results" class="section">
+    <div class="container-wide">
+      <div class="section-header">
+        <span class="section-label">Performance</span>
+        <h2 class="section-title">State-of-the-Art Results</h2>
+        <p class="section-desc">MMFineReason models achieve remarkable performance across diverse benchmarks</p>
+      </div>
+
+      <!-- Results Figure -->
+      <div class="pipeline-visual">
+        <img src="static/images/benchmark_results.png" alt="Benchmark comparison" style="width: 100%; border-radius: 16px;">
+      </div>
+
+      <!-- Benchmark Table -->
+      <div class="benchmark-table-wrapper">
+        <table class="benchmark-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Size</th>
+              <th>MathVista</th>
+              <th>MathVision</th>
+              <th>MathVerse</th>
+              <th>DynaMath</th>
+              <th>LogicVista</th>
+              <th>ScienceQA</th>
+              <th>MMMU</th>
+              <th>Avg</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="model-name">Qwen3-VL-32B-Thinking</td>
+              <td>32B</td>
+              <td>85.9</td>
+              <td>70.2</td>
+              <td>82.6</td>
+              <td>82.0</td>
+              <td>70.9</td>
+              <td>97.2</td>
+              <td>78.1</td>
+              <td>77.9</td>
+            </tr>
+            <tr>
+              <td class="model-name">GPT5-mini-High</td>
+              <td>-</td>
+              <td>79.1</td>
+              <td>71.9</td>
+              <td>78.8</td>
+              <td>81.4</td>
+              <td>71.4</td>
+              <td>96.9</td>
+              <td>79.0</td>
+              <td>76.5</td>
+            </tr>
+            <tr>
+              <td class="model-name">Gemini-2.5-Flash</td>
+              <td>-</td>
+              <td>79.4</td>
+              <td>64.3</td>
+              <td>77.7</td>
+              <td>75.9</td>
+              <td>67.3</td>
+              <td>97.1</td>
+              <td>77.7</td>
+              <td>75.0</td>
+            </tr>
+            <tr>
+              <td class="model-name">Qwen3-VL-30B-A3B-Thinking</td>
+              <td>30B</td>
+              <td>81.9</td>
+              <td>65.7</td>
+              <td>79.6</td>
+              <td>80.1</td>
+              <td>65.8</td>
+              <td>96.4</td>
+              <td>76.0</td>
+              <td>74.5</td>
+            </tr>
+            <tr class="highlight">
+              <td class="model-name">
+                <span class="model-badge">Ours</span>
+                MMFineReason-8B
+              </td>
+              <td>8B</td>
+              <td>81.7</td>
+              <td>67.1</td>
+              <td>81.5</td>
+              <td>83.4</td>
+              <td>68.5</td>
+              <td>97.5</td>
+              <td>71.3</td>
+              <td>75.7</td>
+            </tr>
+            <tr class="highlight">
+              <td class="model-name">
+                <span class="model-badge">Ours</span>
+                MMFineReason-4B
+              </td>
+              <td>4B</td>
+              <td>82.2</td>
+              <td>61.3</td>
+              <td>78.7</td>
+              <td>80.6</td>
+              <td>67.6</td>
+              <td>95.8</td>
+              <td>69.6</td>
+              <td>73.9</td>
+            </tr>
+            <tr>
+              <td class="model-name">Qwen3-VL-8B-Thinking</td>
+              <td>8B</td>
+              <td>81.4</td>
+              <td>62.7</td>
+              <td>77.7</td>
+              <td>73.2</td>
+              <td>65.1</td>
+              <td>94.8</td>
+              <td>74.1</td>
+              <td>72.5</td>
+            </tr>
+            <tr>
+              <td class="model-name">MMR1-8B</td>
+              <td>8B</td>
+              <td>75.3</td>
+              <td>48.4</td>
+              <td>67.3</td>
+              <td>73.6</td>
+              <td>54.6</td>
+              <td>95.4</td>
+              <td>62.8</td>
+              <td>67.4</td>
+            </tr>
+            <tr>
+              <td class="model-name">HoneyBee-8B</td>
+              <td>8B</td>
+              <td>71.9</td>
+              <td>37.4</td>
+              <td>60.9</td>
+              <td>69.4</td>
+              <td>47.8</td>
+              <td>95.2</td>
+              <td>63.1</td>
+              <td>65.1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table 5: SFT vs RL Comparison -->
+      <div class="training-comparison">
+        <h3 class="subsection-title" style="margin-top: 48px;">Training Stage Analysis</h3>
+        <p class="subsection-desc">Table 5: Contribution of SFT and RL stages to model performance.</p>
+        <div class="benchmark-table-wrapper" style="margin-top: 16px;">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Stage</th>
+                <th>MathVista</th>
+                <th>MathVision</th>
+                <th>MathVerse</th>
+                <th>DynaMath</th>
+                <th>Avg</th>
+                <th>Δ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="section-divider">
+                <td colspan="8" class="model-section">8B Model</td>
+              </tr>
+              <tr>
+                <td>Qwen3-VL-8B-Instruct</td>
+                <td><span class="stage-badge base">Base</span></td>
+                <td>70.1</td>
+                <td>40.2</td>
+                <td>58.3</td>
+                <td>52.8</td>
+                <td>55.4</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>MMFineReason-8B</td>
+                <td><span class="stage-badge sft">+SFT</span></td>
+                <td>79.8</td>
+                <td>63.5</td>
+                <td>78.2</td>
+                <td>79.1</td>
+                <td>72.4</td>
+                <td class="delta-positive">+17.0</td>
+              </tr>
+              <tr class="highlight">
+                <td>MMFineReason-8B</td>
+                <td><span class="stage-badge rl">+RL</span></td>
+                <td>81.7</td>
+                <td>67.1</td>
+                <td>81.5</td>
+                <td>83.4</td>
+                <td>75.7</td>
+                <td class="delta-positive">+3.3</td>
+              </tr>
+              <tr class="section-divider">
+                <td colspan="8" class="model-section">4B Model</td>
+              </tr>
+              <tr>
+                <td>Qwen3-VL-4B-Instruct</td>
+                <td><span class="stage-badge base">Base</span></td>
+                <td>65.2</td>
+                <td>35.8</td>
+                <td>52.1</td>
+                <td>48.3</td>
+                <td>50.4</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>MMFineReason-4B</td>
+                <td><span class="stage-badge sft">+SFT</span></td>
+                <td>78.5</td>
+                <td>58.2</td>
+                <td>75.4</td>
+                <td>76.8</td>
+                <td>70.1</td>
+                <td class="delta-positive">+19.7</td>
+              </tr>
+              <tr class="highlight">
+                <td>MMFineReason-4B</td>
+                <td><span class="stage-badge rl">+RL</span></td>
+                <td>82.2</td>
+                <td>61.3</td>
+                <td>78.7</td>
+                <td>80.6</td>
+                <td>73.9</td>
+                <td class="delta-positive">+3.8</td>
+              </tr>
+              <tr class="section-divider">
+                <td colspan="8" class="model-section">2B Model</td>
+              </tr>
+              <tr>
+                <td>Qwen3-VL-2B-Instruct</td>
+                <td><span class="stage-badge base">Base</span></td>
+                <td>58.6</td>
+                <td>28.4</td>
+                <td>45.2</td>
+                <td>41.5</td>
+                <td>43.4</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>MMFineReason-2B</td>
+                <td><span class="stage-badge sft">+ SFT</span></td>
+                <td>72.3</td>
+                <td>49.6</td>
+                <td>68.1</td>
+                <td>67.2</td>
+                <td>62.8</td>
+                <td class="delta-positive">+19.4</td>
+              </tr>
+              <tr class="highlight">
+                <td>MMFineReason-2B</td>
+                <td><span class="stage-badge rl">+ SFT + RL</span></td>
+                <td>75.8</td>
+                <td>52.4</td>
+                <td>71.3</td>
+                <td>72.1</td>
+                <td>66.2</td>
+                <td class="delta-positive">+3.4</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note" style="margin-top: 12px;"><strong>SFT</strong> provides the primary performance boost (+17~20 avg), establishing strong reasoning foundations. <strong>RL</strong> further refines all models (+3.3~3.8 avg), with consistent improvements across model sizes.</p>
+      </div>
+
+      <!-- Key Results Summary -->
+      <div class="results-summary">
+        <p>
+          <strong>Key Results:</strong> MFR-8B outperforms Qwen3-VL-30B-A3B-Thinking on nearly all mathematical benchmarks while using 3.75× fewer active parameters. MMFineReason-123K (only 5% of data) achieves 73.3 average score, matching full HoneyBee-2.5M and MMR1-1.6M datasets. Despite minimal chart/real-world training data, MFR-8B achieves strong results on CharXiv (90.8%) and RealWorldQA (75.6%), demonstrating excellent cross-domain generalization.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Ablation Studies -->
+  <section id="ablation" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Analysis</span>
+        <h2 class="section-title">Ablation Studies</h2>
+        <p class="section-desc">Key insights from our comprehensive experiments on data and training strategies</p>
+      </div>
+
+      <!-- Data Efficiency Ablation -->
+      <div class="ablation-block">
+        <h3 class="ablation-title">Data Efficiency</h3>
+        <div class="ablation-content">
+          <div class="ablation-figure">
+            <img src="static/images/ablation_data_efficiency.png" alt="Data Efficiency Analysis" style="width: 100%; border-radius: 12px;">
+          </div>
+          <div class="ablation-text">
+            <p>We filter samples by difficulty using Qwen3-VL-4B-Thinking pass rates:</p>
+            <ul>
+              <li><strong>Full Data (1.77M):</strong> Best performance baseline.</li>
+              <li><strong>Pass Rate ≠ 1 (0.59M):</strong> Removing easy samples → marginal drop, 33% data.</li>
+              <li><strong>Pass Rate = 0 (0.12M):</strong> Only hardest 7% → comparable performance.</li>
+            </ul>
+            <p>High-quality challenging samples provide most of the training signal, enabling faster convergence with minimal data.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Dataset Performance Analysis -->
+      <div class="ablation-block">
+        <h3 class="ablation-title">Sub-Dataset Performance</h3>
+        <div class="ablation-content">
+          <div class="ablation-figure">
+            <img src="static/images/subdataset_performance.png" alt="Sub-Dataset Performance Analysis" style="width: 100%; border-radius: 12px;">
+          </div>
+          <div class="ablation-text">
+            <p>Analysis of how dataset properties affect STEM reasoning performance:</p>
+            <ul>
+              <li><strong>Scale ≠ Performance:</strong> ViRL39K (39K) achieves 98.9% of MMR1's (1.5M) accuracy with only 2.4% of data.</li>
+              <li><strong>Quality Matters:</strong> WeMath2.0-SFT (814 samples) matches datasets 1000× larger.</li>
+              <li><strong>Domain Transfer:</strong> Puzzle/Game datasets underperform on math/science benchmarks.</li>
+              <li><strong>Breadth Wins:</strong> Multi-disciplinary datasets (BMMR: 300+ fields) outperform narrow ones (Geo3K/Geo170K).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Section -->
+  <section id="demo" class="section section-alt">
+    <div class="container-wide">
+      <div class="section-header">
+        <span class="section-label">Examples</span>
+        <h2 class="section-title">Reasoning Demonstrations</h2>
+        <p class="section-desc">Explore detailed Chain-of-Thought reasoning traces across different domains</p>
+      </div>
+
+      <!-- Demo Navigation -->
+      <div class="demo-nav">
+        <button class="demo-btn active" onclick="showDemo('math', this)">
+          <i class="fas fa-square-root-alt"></i> Mathematics
+        </button>
+        <button class="demo-btn" onclick="showDemo('science', this)">
+          <i class="fas fa-flask"></i> Science
+        </button>
+        <button class="demo-btn" onclick="showDemo('puzzle', this)">
+          <i class="fas fa-puzzle-piece"></i> Puzzle
+        </button>
+        <button class="demo-btn" onclick="showDemo('game', this)">
+          <i class="fas fa-gamepad"></i> Game
+        </button>
+      </div>
+
+      <!-- Demo Container -->
+      <div class="demo-container">
+        <div class="demo-left">
+          <div class="demo-image-box">
+            <div class="demo-image-placeholder" id="demo-image">
+              <i class="fas fa-image"></i>
+              <p>Sample image will appear here<br><small>Insert your demo images</small></p>
+            </div>
+          </div>
+          <div class="demo-qa-box">
+            <div class="demo-label">Question</div>
+            <p class="demo-question" id="demo-question">In the given diagram, if ∠ABC = 60° and AB = BC, find the value of ∠BAC.</p>
+            <div class="demo-label" style="margin-top: 16px;">Answer</div>
+            <p class="demo-answer" id="demo-answer">∠BAC = 60°</p>
+          </div>
+        </div>
+        <div class="demo-right">
+          <div class="demo-panel" style="max-height: 250px;">
+            <div class="demo-panel-header">
+              <i class="fas fa-align-left"></i>
+              Dense Caption (Qwen3-VL-Instruct)
+            </div>
+            <div class="demo-panel-content" id="demo-caption">
+### Image Category: Geometric Diagram
+
+**Scene Summary:** A triangle ABC with marked angles and equal side lengths.
+
+**Explicit Component Breakdown:**
+- Triangle (ABC): Equilateral triangle outlined in black
+- Angle marker (∠ABC): Arc indicating 60° at vertex B
+- Side labels: AB and BC marked with tick marks indicating equality
+- Vertices: Points A, B, C labeled at corners
+
+**Interactions and Relationships:**
+- AB connects vertices A and B
+- BC connects vertices B and C
+- Equal tick marks on AB and BC indicate isosceles property
+            </div>
+          </div>
+          <div class="demo-panel" style="flex: 2;">
+            <div class="demo-panel-header">
+              <i class="fas fa-brain"></i>
+              Chain of Thought (Qwen3-VL-235B-Thinking)
+            </div>
+            <div class="demo-panel-content" id="demo-cot">
+&lt;think&gt;
+1. **Analyze Input**: I see a triangle ABC where AB = BC (isosceles) and ∠ABC = 60°.
+
+2. **Recall Properties**: In an isosceles triangle, the base angles are equal. Here, the base angles are ∠BAC and ∠BCA.
+
+3. **Apply Angle Sum Theorem**: The sum of angles in a triangle is 180°.
+   ∠BAC + ∠ABC + ∠BCA = 180°
+   ∠BAC + 60° + ∠BCA = 180°
+
+4. **Use Isosceles Property**: Since AB = BC, we have ∠BAC = ∠BCA.
+   Let ∠BAC = ∠BCA = x
+   x + 60° + x = 180°
+   2x = 120°
+   x = 60°
+
+5. **Verification**: All angles equal 60°, confirming this is actually an equilateral triangle.
+&lt;/think&gt;
+
+Therefore, the final answer is &lt;answer&gt;60°&lt;/answer&gt;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Citation Section -->
+  <section id="citation" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Reference</span>
+        <h2 class="section-title">Citation</h2>
+        <p class="section-desc">If you find our work useful, please cite our paper</p>
+      </div>
+
+      <div class="citation-box">
+        <button class="citation-copy" onclick="copyCitation()">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+        <pre class="citation-code">@article{he2026mmfinereason,
+  title={MMFineReason: A Large-Scale Dataset for Fine-Grained 
+         Multimodal Reasoning with Long-Form Chain-of-Thought Supervision},
+  author={He, Conghui and others},
+  journal={arXiv preprint arXiv:2601.xxxxx},
+  year={2026},
+  url={https://opendatalab.com/MMFineReason}
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="#"><i class="ai ai-arxiv"></i> arXiv</a>
+        <a href="#"><i class="fab fa-github"></i> GitHub</a>
+        <a href="#">🤗 Hugging Face</a>
+        <a href="mailto:heconghui@pjlab.org.cn"><i class="fas fa-envelope"></i> Contact</a>
+      </div>
+      <p class="footer-copy">
+        © 2026 Shanghai AI Laboratory & OpenDataLab. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Demo switching
+    function showDemo(type, btn) {
+      // Update buttons
+      document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Demo content data
+      const demos = {
+        math: {
+          question: "In the given diagram, if ∠ABC = 60° and AB = BC, find the value of ∠BAC.",
+          answer: "∠BAC = 60°",
+          caption: `### Image Category: Geometric Diagram
+
+**Scene Summary:** A triangle ABC with marked angles and equal side lengths.
+
+**Explicit Component Breakdown:**
+- Triangle (ABC): Equilateral triangle outlined in black
+- Angle marker (∠ABC): Arc indicating 60° at vertex B
+- Side labels: AB and BC marked with tick marks indicating equality
+
+**Interactions and Relationships:**
+- Equal tick marks on AB and BC indicate isosceles property`,
+          cot: `<think>
+1. **Analyze Input**: I see a triangle ABC where AB = BC (isosceles) and ∠ABC = 60°.
+
+2. **Recall Properties**: In an isosceles triangle, the base angles are equal.
+
+3. **Apply Angle Sum Theorem**: 
+   ∠BAC + ∠ABC + ∠BCA = 180°
+   ∠BAC + 60° + ∠BCA = 180°
+
+4. **Use Isosceles Property**: Since AB = BC:
+   Let ∠BAC = ∠BCA = x
+   2x + 60° = 180°
+   x = 60°
+
+5. **Verification**: All angles equal 60° ✓
+</think>
+
+Therefore, the final answer is <answer>60°</answer>`
+        },
+        science: {
+          question: "A block of mass 5kg is placed on a frictionless surface. Two forces F₁ = 20N (right) and F₂ = 10N (left) act on it. Calculate the acceleration.",
+          answer: "a = 2 m/s² (to the right)",
+          caption: `### Image Category: Physics / Mechanics Diagram
+
+**Scene Summary:** A free-body diagram showing a block with two opposing horizontal forces.
+
+**Explicit Component Breakdown:**
+- Block: Rectangular object labeled "5 kg"
+- Force F₁: Arrow pointing right, labeled "20N"
+- Force F₂: Arrow pointing left, labeled "10N"
+- Surface: Horizontal line with "frictionless" annotation`,
+          cot: `<think>
+1. **Extract Given Information**:
+   - Mass m = 5 kg
+   - Force F₁ = 20 N (rightward, positive direction)
+   - Force F₂ = 10 N (leftward, negative direction)
+   - Frictionless surface (no friction force)
+
+2. **Calculate Net Force**:
+   F_net = F₁ - F₂
+   F_net = 20 N - 10 N = 10 N (rightward)
+
+3. **Apply Newton's Second Law**:
+   F = ma
+   a = F_net / m
+   a = 10 N / 5 kg
+   a = 2 m/s²
+
+4. **Verify Units**: N/kg = (kg·m/s²)/kg = m/s² ✓
+</think>
+
+Therefore, the final answer is <answer>2 m/s²</answer>`
+        },
+        puzzle: {
+          question: "In this 3×3 pattern matrix, identify the rule and select the missing element from options A, B, C, D.",
+          answer: "Option C",
+          caption: `### Image Category: Puzzle / Logic Diagram
+
+**Scene Summary:** A Raven's Progressive Matrix with 8 filled cells and 1 missing.
+
+**Explicit Component Breakdown:**
+- Grid: 3×3 matrix with bottom-right cell marked "?"
+- Row 1: Circle, Square, Triangle
+- Row 2: Square, Triangle, Circle
+- Row 3: Triangle, Circle, ?
+- Options: A (Square), B (Triangle), C (Square rotated), D (Circle)`,
+          cot: `<think>
+1. **Identify Pattern Type**: Each row contains all three shapes exactly once.
+
+2. **Analyze Rows**:
+   - Row 1: {Circle, Square, Triangle} ✓
+   - Row 2: {Square, Triangle, Circle} ✓
+   - Row 3: {Triangle, Circle, ?}
+
+3. **Apply Row Completion Rule**:
+   Row 3 has Triangle and Circle, missing Square.
+
+4. **Verify with Columns**:
+   - Col 1: {Circle, Square, Triangle} ✓
+   - Col 2: {Square, Triangle, Circle} ✓
+   - Col 3: {Triangle, Circle, Square} - needs Square
+
+5. **Check Options**: Option C shows a Square.
+</think>
+
+Therefore, the final answer is <answer>C</answer>`
+        },
+        game: {
+          question: "In this chess position, it's White's turn. Find the best move that leads to checkmate in 2 moves.",
+          answer: "Qh7+ (Queen to h7 with check)",
+          caption: `### Image Category: Game State Diagram
+
+**Scene Summary:** A chess endgame position with White to move.
+
+**Explicit Component Breakdown:**
+- White pieces: King (g1), Queen (d1), Rook (f1)
+- Black pieces: King (g8), Pawn (f7, g7, h7)
+- Board orientation: White at bottom`,
+          cot: `<think>
+1. **Assess Position**: Black king is confined to back rank with pawns blocking escape.
+
+2. **Identify Tactical Motif**: Back-rank weakness + Queen/Rook battery potential.
+
+3. **Calculate Candidate Moves**:
+   - Qh7+? King must take (Kxh7)
+   - Then Rf8# is checkmate!
+
+4. **Verify Line**:
+   Move 1: Qh7+ Kxh7 (forced)
+   Move 2: Rf8# (Rook delivers checkmate on back rank)
+
+5. **Alternative Check**: If Qh7+ and Black plays g6 instead?
+   - Not legal, pawn is pinned or blocked.
+</think>
+
+Therefore, the final answer is <answer>Qh7+</answer>`
+        }
+      };
+
+      // Update content
+      const demo = demos[type];
+      document.getElementById('demo-question').textContent = demo.question;
+      document.getElementById('demo-answer').textContent = demo.answer;
+      document.getElementById('demo-caption').textContent = demo.caption;
+      document.getElementById('demo-cot').innerHTML = demo.cot.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Copy citation
+    function copyCitation() {
+      const citation = document.querySelector('.citation-code').textContent;
+      navigator.clipboard.writeText(citation).then(() => {
+        const btn = document.querySelector('.citation-copy');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        }, 2000);
+      });
+    }
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Animate domain bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.domain-bar-fill').forEach(bar => {
+            bar.style.width = bar.style.width;
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.distribution-chart').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
