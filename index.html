@@ -106,7 +106,7 @@
 
     .nav-logo {
       font-family: var(--font-mono);
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--color-accent);
       text-decoration: none;
@@ -136,7 +136,7 @@
       display: flex;
       align-items: center;
       position: relative;
-      padding: 120px 0 80px;
+      padding: 120px 0 40px;
       overflow: hidden;
     }
 
@@ -399,7 +399,7 @@
 
     /* Section Styles */
     .section {
-      padding: 100px 0;
+      padding: 60px 0;
       position: relative;
     }
 
@@ -409,7 +409,7 @@
 
     .section-header {
       text-align: center;
-      margin-bottom: 64px;
+      margin-bottom: 50px;
     }
 
     .section-label {
@@ -446,7 +446,7 @@
     }
 
     .abstract-content p {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       color: rgba(26, 26, 46, 0.85);
     }
 
@@ -519,6 +519,17 @@
       padding: 48px;
       margin-bottom: 48px;
       text-align: center;
+      overflow: hidden;
+    }
+    /* 【新增】控制图片的过渡动画 */
+    .pipeline-visual img {
+      transition: transform 0.4s ease; /* 0.4秒平滑过渡 */
+      cursor: zoom-in;                 /* 鼠标变放大镜 */
+    }
+
+    /* 【新增】鼠标悬浮时的放大效果 */
+    .pipeline-visual:hover img {
+      transform: scale(1.1);           /* 放大 1.2 倍 */
     }
 
     .pipeline-placeholder {
@@ -878,6 +889,18 @@
       display: block;
     }
 
+    /* 【新增】控制 JS 动态插入的图片样式 */
+    .demo-image-placeholder img {
+      transition: transform 0.4s ease; /* 0.4秒平滑过渡 */
+      cursor: zoom-in; /* 鼠标放上去显示放大镜图标 */
+      transform-origin: center center; /* 从中心放大 */
+    }
+
+    /* 【新增】鼠标悬浮时的状态 */
+    .demo-image-placeholder img:hover {
+      transform: scale(1.1); /* 放大 2.0 倍 (你可以改成 1.5 或 3.0) */
+    }
+
     .demo-qa-box {
       background: var(--color-bg-tertiary);
       border: 1px solid var(--color-border);
@@ -900,6 +923,7 @@
       margin-bottom: 20px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--color-border);
+      white-space: pre-wrap;
     }
 
     .demo-answer {
@@ -912,6 +936,7 @@
       display: flex;
       flex-direction: column;
       gap: 24px;
+      white-space: pre-wrap;
     }
 
     .demo-panel {
@@ -925,14 +950,14 @@
     }
 
     .demo-panel-header {
-      padding: 16px 20px;
+      padding: 0px 20px;
       background: var(--color-bg);
       border-bottom: 1px solid var(--color-border);
       font-weight: 600;
       font-size: 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0px;
     }
 
     .demo-panel-header i {
@@ -940,7 +965,7 @@
     }
 
     .demo-panel-content {
-      padding: 20px;
+      padding: 12px;
       flex: 1;
       overflow-y: auto;
       font-size: 13px;
@@ -1271,6 +1296,16 @@
       text-align: center;
       padding: 20px;
     }
+    .ablation-figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px; /* 保持原有的圆角 */
+      transition: transform 0.4s ease; /* 添加平滑过渡 */
+      cursor: zoom-in;
+    }
+    .ablation-figure:hover img {
+      transform: scale(1.1); /* 放大 1.2 倍 */
+    }
 
     .ablation-figure .figure-placeholder i {
       font-size: 36px;
@@ -1414,7 +1449,9 @@
   <!-- Navigation -->
   <nav class="nav">
     <div class="container nav-inner">
-      <a href="#" class="nav-logo">MMFineReason</a>
+      <a href="#" class="nav-logo">
+        <img src="static/assets/logo.png" alt="Logo" style="width: 35px; height: 35px; margin-right: 0px; vertical-align: -7px;">
+        MMFineReason</a>
       <ul class="nav-links">
         <li><a href="#abstract">Abstract</a></li>
         <li><a href="#pipeline">Pipeline</a></li>
@@ -1433,7 +1470,7 @@
     <div class="hero-grid"></div>
     <div class="container hero-content">
       <h1 class="hero-title">
-        <span class="highlight">MMFineReason</span>
+        <span class="highlight"><img src="static/assets/logo.png" alt="Logo" style="width: 100px; height: 100px;margin-right: 10px; vertical-align: -7px;">MMFineReason</span>
       </h1>
       <p class="hero-subtitle">
         A Large-Scale Dataset for Fine-Grained Multimodal Reasoning with Long-Form Chain-of-Thought Supervision
@@ -1463,11 +1500,11 @@
           <i class="ai ai-arxiv"></i>
           <span>arXiv Paper</span>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="https://github.com/MMFineReason/MMFineReason" class="btn btn-secondary">
           <i class="fab fa-github"></i>
           <span>GitHub Code</span>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="https://huggingface.co/collections/OpenDataArena/mmfinereason" class="btn btn-secondary">
           <span>🤗</span>
           <span>Dataset & Models</span>
         </a>
@@ -1506,7 +1543,7 @@
     <div class="container">
       <div class="section-header">
         <span class="section-label">Methodology</span>
-        <h2 class="section-title">Dataset Construction Pipeline</h2>
+        <h2 class="section-title">Data Construction Pipeline</h2>
         <p class="section-desc">A systematic four-stage pipeline ensuring data diversity and high-quality reasoning annotations</p>
       </div>
 
@@ -1569,11 +1606,11 @@
       <!-- Figure 5: Dataset Composition -->
       <div class="figure-container">
         <img src="static/images/composition_sunburst.png" alt="Dataset Composition of MMFineReason-SFT" style="width: 100%; max-width: 900px; display: block; margin: 0 auto; border-radius: 12px;">
-        <p class="figure-caption"><strong>Figure 5:</strong> Dataset Composition of MMFineReason-SFT. The outer ring represents the proportion of major categories, and the inner ring shows the distribution of specific datasets. The actual data distribution is dominated by Mathematics (79.4%), followed by Science (13.8%), Puzzle/Game (4.6%), and General/OCR (2.2%).</p>
+        <p class="figure-caption">Dataset Composition of MMFineReason-SFT. The outer ring represents the proportion of major categories, and the inner ring shows the distribution of specific datasets. The actual data distribution is dominated by Mathematics (79.4%), followed by Science (13.8%), Puzzle/Game (4.6%), and General/OCR (2.2%).</p>
       </div>
 
       <!-- Table 2: Image Category Statistics -->
-      <div class="category-stats-section">
+      <!-- <div class="category-stats-section">
         <h3 class="subsection-title">Image Category Distribution</h3>
         <p class="subsection-desc">Table 2: STEM/Diagrammatic images dominate (97.8%), with diverse natural image coverage.</p>
         <div class="category-tables">
@@ -1621,6 +1658,56 @@
             </div>
           </div>
         </div>
+      </div> -->
+      <div class="category-stats-section">
+        <h3 class="subsection-title">Image Category Distribution</h3>
+        <p class="subsection-desc">Table 2: STEM/Diagrammatic images dominate, with diverse natural image coverage.</p>
+        <div class="category-tables">
+          <div class="category-table-card">
+            <div class="category-table-header">
+              <span class="category-badge stem">STEM / Diagrammatic</span>
+              <span class="category-total">1,739,330 images</span>
+            </div>
+            <div class="category-table-body scrollable">
+              <div class="category-row"><span>Geometric Diagram</span><span class="category-value">50.02%</span></div>
+              <div class="category-row"><span>Mathematical Plot / Chart</span><span class="category-value">19.11%</span></div>
+              <div class="category-row"><span>Puzzle / Logic Diagram</span><span class="category-value">6.17%</span></div>
+              <div class="category-row"><span>Diagram / Flowchart</span><span class="category-value">5.80%</span></div>
+              <div class="category-row"><span>Table / Matrix</span><span class="category-value">4.41%</span></div>
+              <div class="category-row"><span>Textbook Illustration</span><span class="category-value">3.84%</span></div>
+              <div class="category-row"><span>Abstract Mathematical Representation</span><span class="category-value">3.31%</span></div>
+              <div class="category-row"><span>Spatial Reasoning Scene</span><span class="category-value">2.02%</span></div>
+              <div class="category-row"><span>Physics / Mechanics Diagram</span><span class="category-value">1.98%</span></div>
+              <div class="category-row"><span>Biological Structure</span><span class="category-value">1.02%</span></div>
+              <div class="category-row"><span>Experimental Setup</span><span class="category-value">0.63%</span></div>
+              <div class="category-row"><span>Geological / Earth Science Diagram</span><span class="category-value">0.55%</span></div>
+              <div class="category-row"><span>Circuit / Network Diagram</span><span class="category-value">0.54%</span></div>
+              <div class="category-row"><span>Astronomy / Space Visualization</span><span class="category-value">0.39%</span></div>
+              <div class="category-row"><span>Molecular / Chemical Diagram</span><span class="category-value">0.21%</span></div>
+            </div>
+          </div>
+
+          <div class="category-table-card">
+            <div class="category-table-header">
+              <span class="category-badge natural">Natural Image</span>
+              <span class="category-total">29,334 images</span>
+            </div>
+            <div class="category-table-body scrollable">
+              <div class="category-row"><span>Urban / Street Scene</span><span class="category-value">18.09%</span></div>
+              <div class="category-row"><span>Indoor / Interior Scene</span><span class="category-value">16.27%</span></div>
+              <div class="category-row"><span>Human Portrait / Activity</span><span class="category-value">12.92%</span></div>
+              <div class="category-row"><span>Sports / High-Motion Scene</span><span class="category-value">12.47%</span></div>
+              <div class="category-row"><span>Document / Text Image</span><span class="category-value">9.89%</span></div>
+              <div class="category-row"><span>Animal / Wildlife Scene</span><span class="category-value">7.24%</span></div>
+              <div class="category-row"><span>Natural Landscape Scene</span><span class="category-value">6.71%</span></div>
+              <div class="category-row"><span>Food / Beverage Item</span><span class="category-value">6.26%</span></div>
+              <div class="category-row"><span>Vehicle / Machinery Object</span><span class="category-value">4.98%</span></div>
+              <div class="category-row"><span>Product / Still Life Object</span><span class="category-value">3.84%</span></div>
+              <div class="category-row"><span>Artwork / Illustration</span><span class="category-value">1.11%</span></div>
+              <div class="category-row"><span>Technical / Surveillance / Medical</span><span class="category-value">0.23%</span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1636,7 +1723,7 @@
 
       <!-- Table 3: Token Length Statistics -->
       <div class="table-section">
-        <h3 class="table-title">Table 3: Comparison of Token Length Statistics Across Datasets</h3>
+        <h3 class="table-title">Comparison of Token Length Statistics Across Datasets</h3>
         <p class="table-desc">We report the distribution metrics (mean, median, and percentiles) for reasoning chains (CoT) and image captions.</p>
         <div class="benchmark-table-wrapper">
           <table class="benchmark-table">
@@ -1660,16 +1747,16 @@
               <tr class="highlight">
                 <td><strong>MMFineReason (Ours)</strong></td>
                 <td>CoT</td>
-                <td>2,286,130</td>
-                <td>8,785,423,669</td>
-                <td><strong>3,842.92</strong></td>
-                <td>2,818.0</td>
-                <td>2,864.68</td>
-                <td>377</td>
-                <td>19,044</td>
-                <td>1,917.0</td>
-                <td>4,703.0</td>
-                <td>10,271.0</td>
+                <td>1,770,926</td>
+                <td>5,152,806,394</td>
+                <td><strong>2,909.67</strong></td>
+                <td>2,038</td>
+                <td>2,463.83</td>
+                <td>239</td>
+                <td>16,316</td>
+                <td>1,321</td>
+                <td>3,569</td>
+                <td>8,207</td>
               </tr>
               <tr>
                 <td>OpenMMReasoner</td>
@@ -1677,13 +1764,13 @@
                 <td>874,357</td>
                 <td>590,096,263</td>
                 <td>674.89</td>
-                <td>180.0</td>
+                <td>180</td>
                 <td>1,477.53</td>
                 <td>26</td>
                 <td>16,483</td>
-                <td>102.0</td>
-                <td>464.0</td>
-                <td>3,318.0</td>
+                <td>102</td>
+                <td>464</td>
+                <td>3,318</td>
               </tr>
               <tr>
                 <td>HoneyBee</td>
@@ -1691,27 +1778,27 @@
                 <td>2,481,229</td>
                 <td>2,636,405,079</td>
                 <td>1,062.54</td>
-                <td>972.0</td>
+                <td>972</td>
                 <td>428.00</td>
                 <td>203</td>
                 <td>7,190</td>
-                <td>745.0</td>
-                <td>1,298.0</td>
-                <td>1,931.0</td>
+                <td>745</td>
+                <td>1,298</td>
+                <td>1,931</td>
               </tr>
               <tr class="highlight">
                 <td><strong>MMFineReason (Ours)</strong></td>
                 <td>Caption</td>
-                <td>2,286,130</td>
-                <td>1,421,853,204</td>
-                <td><strong>621.95</strong></td>
-                <td>592.0</td>
-                <td>190.97</td>
+                <td>1,770,926</td>
+                <td>1,079,313,259</td>
+                <td><strong>609.46</strong></td>
+                <td>582</td>
+                <td>184.88</td>
                 <td>1</td>
-                <td>5,986</td>
-                <td>501.0</td>
-                <td>704.0</td>
-                <td>946.0</td>
+                <td>5,187</td>
+                <td>494</td>
+                <td>688</td>
+                <td>920</td>
               </tr>
               <tr>
                 <td>HoneyBee</td>
@@ -1719,18 +1806,22 @@
                 <td>1,439,921</td>
                 <td>431,096,653</td>
                 <td>299.39</td>
-                <td>264.0</td>
+                <td>264</td>
                 <td>157.99</td>
                 <td>21</td>
                 <td>2,739</td>
-                <td>201.0</td>
-                <td>350.0</td>
-                <td>598.0</td>
+                <td>201</td>
+                <td>350</td>
+                <td>598</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="table-note">Bold values indicate the highest statistics, highlighting the significant reasoning depth of MMFineReason. MMFineReason achieves an average CoT length of <strong>3,842 tokens</strong> — approximately <strong>3.6× longer</strong> than HoneyBee and <strong>5.7× longer</strong> than OpenMMReasoner.</p>
+      </div>
+      <div class="results-summary">
+        <p>
+          Bold values indicate the highest statistics, highlighting the significant reasoning depth of MMFineReason. MMFineReason achieves an average CoT length of <strong>2,910 tokens</strong> — approximately <strong>2.7× longer</strong> than HoneyBee and <strong>4.3× longer</strong> than OpenMMReasoner.</p>
+        </p>
       </div>
     </div>
   </section>
@@ -1756,13 +1847,20 @@
             <tr>
               <th>Model</th>
               <th>Size</th>
+              <th>MMMU</th>
               <th>MathVista</th>
               <th>MathVision</th>
               <th>MathVerse</th>
               <th>DynaMath</th>
               <th>LogicVista</th>
+              <th>VisuLogic</th>
               <th>ScienceQA</th>
-              <th>MMMU</th>
+              <th>RWQA</th>
+              <th>MMBench-EN</th>
+              <th>MMStar</th>
+              <th>AI2D</th>
+              <th>CharXiv<sub>reas.</sub></th>
+              <th>CharXiv<sub>desc.</sub></th>
               <th>Avg</th>
             </tr>
           </thead>
@@ -1770,50 +1868,40 @@
             <tr>
               <td class="model-name">Qwen3-VL-32B-Thinking</td>
               <td>32B</td>
+              <td>78.1</td>
               <td>85.9</td>
               <td>70.2</td>
               <td>82.6</td>
               <td>82.0</td>
               <td>70.9</td>
+              <td>32.4</td>
               <td>97.2</td>
-              <td>78.1</td>
+              <td>78.4</td>
+              <td>89.5</td>
+              <td>79.4</td>
+              <td>88.9</td>
+              <td>65.2</td>
+              <td>90.2</td>
               <td>77.9</td>
             </tr>
             <tr>
-              <td class="model-name">GPT5-mini-High</td>
+              <td class="model-name">GPT5-mini</td>
               <td>-</td>
+              <td>79.0</td>
               <td>79.1</td>
               <td>71.9</td>
               <td>78.8</td>
               <td>81.4</td>
               <td>71.4</td>
+              <td>27.2</td>
               <td>96.9</td>
               <td>79.0</td>
+              <td>86.6</td>
+              <td>74.1</td>
+              <td>88.2</td>
+              <td>68.6</td>
+              <td>89.4</td>
               <td>76.5</td>
-            </tr>
-            <tr>
-              <td class="model-name">Gemini-2.5-Flash</td>
-              <td>-</td>
-              <td>79.4</td>
-              <td>64.3</td>
-              <td>77.7</td>
-              <td>75.9</td>
-              <td>67.3</td>
-              <td>97.1</td>
-              <td>77.7</td>
-              <td>75.0</td>
-            </tr>
-            <tr>
-              <td class="model-name">Qwen3-VL-30B-A3B-Thinking</td>
-              <td>30B</td>
-              <td>81.9</td>
-              <td>65.7</td>
-              <td>79.6</td>
-              <td>80.1</td>
-              <td>65.8</td>
-              <td>96.4</td>
-              <td>76.0</td>
-              <td>74.5</td>
             </tr>
             <tr class="highlight">
               <td class="model-name">
@@ -1821,14 +1909,59 @@
                 MMFineReason-8B
               </td>
               <td>8B</td>
+              <td>71.3</td>
               <td>81.7</td>
               <td>67.1</td>
               <td>81.5</td>
               <td>83.4</td>
               <td>68.5</td>
+              <td>30.5</td>
               <td>97.5</td>
-              <td>71.3</td>
+              <td>75.6</td>
+              <td>88.9</td>
+              <td>75.2</td>
+              <td>87.9</td>
+              <td>60.0</td>
+              <td>90.8</td>
               <td>75.7</td>
+            </tr>
+            <tr>
+              <td class="model-name">Gemini-2.5-Flash</td>
+              <td>-</td>
+              <td>77.7</td>
+              <td>79.4</td>
+              <td>64.3</td>
+              <td>77.7</td>
+              <td>75.9</td>
+              <td>67.3</td>
+              <td>31.0</td>
+              <td>97.1</td>
+              <td>76.0</td>
+              <td>87.0</td>
+              <td>76.5</td>
+              <td>88.7</td>
+              <td>61.7</td>
+              <td>90.1</td>
+              <td>75.0</td>
+            </tr>
+            <tr>
+              <td class="model-name">Qwen3-VL-30B-A3B-Thinking</td>
+              <td>30B</td>
+              <td>76.0</td>
+              <td>81.9</td>
+              <td>65.7</td>
+              <td>79.6</td>
+              <td>80.1</td>
+              <td>65.8</td>
+              <td>26.6</td>
+              <td>96.4</td>
+              <td>77.4</td>
+              <td>87.0</td>
+              <td>75.5</td>
+              <td>86.9</td>
+              <td>56.6</td>
+              <td>86.9</td>
+              <td>74.5</td>
             </tr>
             <tr class="highlight">
               <td class="model-name">
@@ -1836,185 +1969,354 @@
                 MMFineReason-4B
               </td>
               <td>4B</td>
+              <td>69.6</td>
               <td>82.2</td>
               <td>61.3</td>
               <td>78.7</td>
               <td>80.6</td>
               <td>67.6</td>
+              <td>29.8</td>
               <td>95.8</td>
-              <td>69.6</td>
+              <td>74.9</td>
+              <td>88.7</td>
+              <td>72.8</td>
+              <td>86.5</td>
+              <td>58.1</td>
+              <td>87.7</td>
               <td>73.9</td>
             </tr>
             <tr>
               <td class="model-name">Qwen3-VL-8B-Thinking</td>
               <td>8B</td>
+              <td>74.1</td>
               <td>81.4</td>
               <td>62.7</td>
               <td>77.7</td>
               <td>73.2</td>
               <td>65.1</td>
+              <td>27.5</td>
               <td>94.8</td>
-              <td>74.1</td>
+              <td>73.5</td>
+              <td>85.3</td>
+              <td>75.3</td>
+              <td>84.9</td>
+              <td>53.0</td>
+              <td>85.9</td>
               <td>72.5</td>
             </tr>
             <tr>
               <td class="model-name">MMR1-8B</td>
               <td>8B</td>
+              <td>62.8</td>
               <td>75.3</td>
               <td>48.4</td>
               <td>67.3</td>
               <td>73.6</td>
               <td>54.6</td>
+              <td>25.4</td>
               <td>95.4</td>
-              <td>62.8</td>
+              <td>71.0</td>
+              <td>86.9</td>
+              <td>69.3</td>
+              <td>83.4</td>
+              <td>48.8</td>
+              <td>81.5</td>
               <td>67.4</td>
+            </tr>
+            <tr class="highlight">
+              <td class="model-name">
+                <span class="model-badge">Ours</span>
+                MMFineReason-2B
+              </td>
+              <td>2B</td>
+              <td>54.8</td>
+              <td>74.6</td>
+              <td>45.3</td>
+              <td>69.2</td>
+              <td>71.4</td>
+              <td>53.8</td>
+              <td>28.3</td>
+              <td>94.4</td>
+              <td>68.3</td>
+              <td>84.5</td>
+              <td>67.7</td>
+              <td>82.5</td>
+              <td>45.4</td>
+              <td>74.3</td>
+              <td>65.3</td>
+            </tr>
+            <tr>
+              <td class="model-name">OMR</td>
+              <td>7B</td>
+              <td>57.8</td>
+              <td>79.5</td>
+              <td>43.6</td>
+              <td>63.8</td>
+              <td>69.1</td>
+              <td>50.0</td>
+              <td>24.4</td>
+              <td>96.8</td>
+              <td>69.4</td>
+              <td>85.9</td>
+              <td>69.0</td>
+              <td>85.0</td>
+              <td>46.1</td>
+              <td>73.5</td>
+              <td>65.3</td>
             </tr>
             <tr>
               <td class="model-name">HoneyBee-8B</td>
               <td>8B</td>
+              <td>63.1</td>
               <td>71.9</td>
               <td>37.4</td>
               <td>60.9</td>
               <td>69.4</td>
               <td>47.8</td>
+              <td>25.9</td>
               <td>95.2</td>
-              <td>63.1</td>
+              <td>70.5</td>
+              <td>87.4</td>
+              <td>73.3</td>
+              <td>86.0</td>
+              <td>47.4</td>
+              <td>75.8</td>
               <td>65.1</td>
             </tr>
           </tbody>
         </table>
       </div>
+      <div class="results-summary">
+        <p>
+          <strong>Key Results:</strong> MFR-8B outperforms Qwen3-VL-30B-A3B-Thinking on nearly all mathematical benchmarks while using 3.75× fewer parameters. Despite minimal chart/real-world training data, MFR-8B achieves strong results on CharXiv (90.8%) and RealWorldQA (75.6%), demonstrating excellent cross-domain generalization.
+        </p>
+      </div>
 
       <!-- Table 5: SFT vs RL Comparison -->
       <div class="training-comparison">
         <h3 class="subsection-title" style="margin-top: 48px;">Training Stage Analysis</h3>
-        <p class="subsection-desc">Table 5: Contribution of SFT and RL stages to model performance.</p>
+        <p class="subsection-desc">Main results of different model scales across various multimodal benchmarks. We compare our SFT and RL models against the base model.</p>
         <div class="benchmark-table-wrapper" style="margin-top: 16px;">
           <table class="benchmark-table">
             <thead>
               <tr>
-                <th>Model</th>
-                <th>Stage</th>
+                <th rowspan="2">Size</th>
+                <th rowspan="2">Model</th>
                 <th>MathVista</th>
                 <th>MathVision</th>
                 <th>MathVerse</th>
                 <th>DynaMath</th>
-                <th>Avg</th>
-                <th>Δ</th>
+                <th>LogicVista</th>
+                <th>AI2D</th>
+                <th>SciQA</th>
+                <th>RWQA</th>
+                <th colspan="2">CharXiv</th>
+                <th rowspan="2">Avg</th>
+              </tr>
+              <tr>
+                <th>mini</th>
+                <th>test</th>
+                <th>mini</th>
+                <th>test</th>
+                <th>test</th>
+                <th>test</th>
+                <th>test</th>
+                <th>test</th>
+                <th>reas.</th>
+                <th>desc.</th>
               </tr>
             </thead>
             <tbody>
               <tr class="section-divider">
-                <td colspan="8" class="model-section">8B Model</td>
+                <td colspan="13" class="model-section">2B Model</td>
               </tr>
               <tr>
-                <td>Qwen3-VL-8B-Instruct</td>
-                <td><span class="stage-badge base">Base</span></td>
-                <td>70.1</td>
-                <td>40.2</td>
-                <td>58.3</td>
-                <td>52.8</td>
-                <td>55.4</td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>MMFineReason-8B</td>
-                <td><span class="stage-badge sft">+SFT</span></td>
-                <td>79.8</td>
-                <td>63.5</td>
-                <td>78.2</td>
-                <td>79.1</td>
-                <td>72.4</td>
-                <td class="delta-positive">+17.0</td>
-              </tr>
-              <tr class="highlight">
-                <td>MMFineReason-8B</td>
-                <td><span class="stage-badge rl">+RL</span></td>
-                <td>81.7</td>
-                <td>67.1</td>
-                <td>81.5</td>
-                <td>83.4</td>
-                <td>75.7</td>
-                <td class="delta-positive">+3.3</td>
-              </tr>
-              <tr class="section-divider">
-                <td colspan="8" class="model-section">4B Model</td>
-              </tr>
-              <tr>
-                <td>Qwen3-VL-4B-Instruct</td>
-                <td><span class="stage-badge base">Base</span></td>
-                <td>65.2</td>
-                <td>35.8</td>
-                <td>52.1</td>
-                <td>48.3</td>
-                <td>50.4</td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>MMFineReason-4B</td>
-                <td><span class="stage-badge sft">+SFT</span></td>
-                <td>78.5</td>
-                <td>58.2</td>
-                <td>75.4</td>
-                <td>76.8</td>
-                <td>70.1</td>
-                <td class="delta-positive">+19.7</td>
-              </tr>
-              <tr class="highlight">
-                <td>MMFineReason-4B</td>
-                <td><span class="stage-badge rl">+RL</span></td>
-                <td>82.2</td>
+                <td rowspan="4">2B</td>
+                <td>Qwen3-VL-Instruct</td>
                 <td>61.3</td>
-                <td>78.7</td>
-                <td>80.6</td>
-                <td>73.9</td>
-                <td class="delta-positive">+3.8</td>
-              </tr>
-              <tr class="section-divider">
-                <td colspan="8" class="model-section">2B Model</td>
-              </tr>
-              <tr>
-                <td>Qwen3-VL-2B-Instruct</td>
-                <td><span class="stage-badge base">Base</span></td>
-                <td>58.6</td>
-                <td>28.4</td>
-                <td>45.2</td>
-                <td>41.5</td>
-                <td>43.4</td>
-                <td>—</td>
+                <td>31.6</td>
+                <td>52.1</td>
+                <td>54.2</td>
+                <td>35.8</td>
+                <td>76.9</td>
+                <td>87.4</td>
+                <td>63.9</td>
+                <td>26.8</td>
+                <td>62.3</td>
+                <td>55.2</td>
               </tr>
               <tr>
-                <td>MMFineReason-2B</td>
-                <td><span class="stage-badge sft">+ SFT</span></td>
-                <td>72.3</td>
-                <td>49.6</td>
-                <td>68.1</td>
-                <td>67.2</td>
-                <td>62.8</td>
-                <td class="delta-positive">+19.4</td>
+                <td>Qwen3-VL-Thinking</td>
+                <td>73.6</td>
+                <td>45.9</td>
+                <td>66.9</td>
+                <td>66.7</td>
+                <td>50.0</td>
+                <td>80.4</td>
+                <td>88.0</td>
+                <td>69.5</td>
+                <td>37.1</td>
+                <td>70.1</td>
+                <td>64.8</td>
               </tr>
               <tr class="highlight">
-                <td>MMFineReason-2B</td>
-                <td><span class="stage-badge rl">+ SFT + RL</span></td>
-                <td>75.8</td>
-                <td>52.4</td>
-                <td>71.3</td>
-                <td>72.1</td>
-                <td>66.2</td>
-                <td class="delta-positive">+3.4</td>
+                <td>MFR-SFT</td>
+                <td>73.3</td>
+                <td>40.9</td>
+                <td>70.4</td>
+                <td><u>68.7</u></td>
+                <td><u>52.8</u></td>
+                <td>78.5</td>
+                <td><u>92.3</u></td>
+                <td>67.9</td>
+                <td>39.0</td>
+                <td><u>74.1</u></td>
+                <td><u>65.8</u></td>
+              </tr>
+              <tr class="highlight">
+                <td>MFR-RL</td>
+                <td><b>74.6</b></td>
+                <td><u>45.3</u></td>
+                <td><b>69.2</b></td>
+                <td><b>71.4</b></td>
+                <td><b>53.8</b></td>
+                <td><b>82.5</b></td>
+                <td><b>94.4</b></td>
+                <td><u>68.2</u></td>
+                <td><b>45.4</b></td>
+                <td><b>74.3</b></td>
+                <td><b>67.9</b></td>
+              </tr>
+              <tr class="section-divider">
+                <td colspan="13" class="model-section">4B Model</td>
+              </tr>
+              <tr>
+                <td rowspan="4">4B</td>
+                <td>Qwen3-VL-Instruct</td>
+                <td>73.7</td>
+                <td>51.6</td>
+                <td>46.8</td>
+                <td>65.3</td>
+                <td>53.2</td>
+                <td>84.1</td>
+                <td>88.0</td>
+                <td>70.9</td>
+                <td>39.7</td>
+                <td>76.2</td>
+                <td>65.0</td>
+              </tr>
+              <tr>
+                <td>Qwen3-VL-Thinking</td>
+                <td>79.5</td>
+                <td>60.0</td>
+                <td>75.2</td>
+                <td>74.4</td>
+                <td>61.1</td>
+                <td>84.9</td>
+                <td>94.1</td>
+                <td><u>73.2</u></td>
+                <td>50.3</td>
+                <td><u>83.9</u></td>
+                <td>73.7</td>
+              </tr>
+              <tr class="highlight">
+                <td>MFR-SFT</td>
+                <td><u>80.1</u></td>
+                <td><u>62.4</u></td>
+                <td><u>78.4</u></td>
+                <td><u>79.9</u></td>
+                <td><u>66.7</u></td>
+                <td><u>86.1</u></td>
+                <td><u>96.6</u></td>
+                <td>71.5</td>
+                <td><u>55.9</u></td>
+                <td>87.7</td>
+                <td><u>76.5</u></td>
+              </tr>
+              <tr class="highlight">
+                <td>MFR-RL</td>
+                <td><b>82.2</b></td>
+                <td>61.3</td>
+                <td><b>78.7</b></td>
+                <td><b>80.6</b></td>
+                <td><b>67.6</b></td>
+                <td><b>86.6</b></td>
+                <td>95.8</td>
+                <td><b>74.9</b></td>
+                <td><b>58.1</b></td>
+                <td><b>87.7</b></td>
+                <td><b>77.4</b></td>
+              </tr>
+              <tr class="section-divider">
+                <td colspan="13" class="model-section">8B Model</td>
+              </tr>
+              <tr>
+                <td rowspan="4">8B</td>
+                <td>Qwen3-VL-Instruct</td>
+                <td>77.2</td>
+                <td>53.9</td>
+                <td>62.1</td>
+                <td>67.7</td>
+                <td>55.3</td>
+                <td>85.7</td>
+                <td><u>95.4</u></td>
+                <td>71.5</td>
+                <td>46.4</td>
+                <td>83.0</td>
+                <td>69.8</td>
+              </tr>
+              <tr>
+                <td>Qwen3-VL-Thinking</td>
+                <td><u>81.4</u></td>
+                <td>62.7</td>
+                <td>77.7</td>
+                <td>73.2</td>
+                <td>65.1</td>
+                <td>84.9</td>
+                <td>94.8</td>
+                <td>73.5</td>
+                <td>53.0</td>
+                <td>85.9</td>
+                <td>75.2</td>
+              </tr>
+              <tr class="highlight">
+                <td>MFR-SFT</td>
+                <td>81.2</td>
+                <td><u>67.6</u></td>
+                <td><u>82.2</u></td>
+                <td><u>82.6</u></td>
+                <td><u>68.7</u></td>
+                <td><u>86.5</u></td>
+                <td><u>95.4</u></td>
+                <td><u>74.1</u></td>
+                <td><u>58.4</u></td>
+                <td><u>89.9</u></td>
+                <td><u>78.7</u></td>
+              </tr>
+              <tr class="highlight">
+                <td>MFR-RL</td>
+                <td><b>81.7</b></td>
+                <td>67.1</td>
+                <td><b>81.5</b></td>
+                <td><b>83.4</b></td>
+                <td><b>68.5</b></td>
+                <td><b>87.9</b></td>
+                <td><b>97.5</b></td>
+                <td><b>75.6</b></td>
+                <td><b>60.0</b></td>
+                <td><b>90.8</b></td>
+                <td><b>79.4</b></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="table-note" style="margin-top: 12px;"><strong>SFT</strong> provides the primary performance boost (+17~20 avg), establishing strong reasoning foundations. <strong>RL</strong> further refines all models (+3.3~3.8 avg), with consistent improvements across model sizes.</p>
+        <div class="results-summary">
+          <p>
+            <strong>Key Results:</strong> SFT provides the primary performance boost (+17~20 avg), establishing strong reasoning foundations. RL further refines all models (+3.3~3.8 avg), with consistent improvements across model sizes.
+          </p>
+        </div>
       </div>
 
-      <!-- Key Results Summary -->
-      <div class="results-summary">
-        <p>
-          <strong>Key Results:</strong> MFR-8B outperforms Qwen3-VL-30B-A3B-Thinking on nearly all mathematical benchmarks while using 3.75× fewer active parameters. MMFineReason-123K (only 5% of data) achieves 73.3 average score, matching full HoneyBee-2.5M and MMR1-1.6M datasets. Despite minimal chart/real-world training data, MFR-8B achieves strong results on CharXiv (90.8%) and RealWorldQA (75.6%), demonstrating excellent cross-domain generalization.
-        </p>
-      </div>
     </div>
   </section>
 
@@ -2039,10 +2341,14 @@
             <p>We filter samples by difficulty using Qwen3-VL-4B-Thinking pass rates:</p>
             <ul>
               <li><strong>Full Data (1.77M):</strong> Best performance baseline.</li>
-              <li><strong>Pass Rate ≠ 1 (0.59M):</strong> Removing easy samples → marginal drop, 33% data.</li>
-              <li><strong>Pass Rate = 0 (0.12M):</strong> Only hardest 7% → comparable performance.</li>
+              <li><strong>Pass Rate ≠ 1 (0.59M):</strong> Removing 66% easy samples → marginal drop.</li>
+              <li><strong>Pass Rate = 0 (0.12M):</strong> Only hardest 7% → comparable performance (73.3 average score), <strong>surpasses Qwen3-VL-8B-Thinking</strong>.</li>
             </ul>
-            <p>High-quality challenging samples provide most of the training signal, enabling faster convergence with minimal data.</p>
+            <div class="results-summary">
+              <p>
+                <strong>Key Results:</strong> High-quality challenging samples provide most of the training signal, enabling faster convergence with minimal data.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -2098,65 +2404,188 @@
         <div class="demo-left">
           <div class="demo-image-box">
             <div class="demo-image-placeholder" id="demo-image">
-              <i class="fas fa-image"></i>
-              <p>Sample image will appear here<br><small>Insert your demo images</small></p>
+              <img src="static/assets/math.jpg" style="width: 100%; height: auto;">
             </div>
           </div>
           <div class="demo-qa-box">
             <div class="demo-label">Question</div>
-            <p class="demo-question" id="demo-question">In the given diagram, if ∠ABC = 60° and AB = BC, find the value of ∠BAC.</p>
+            <p class="demo-question" id="demo-question">Find the value of the variable y in the figure. Choices: 55, 115, 125, 135.</p>
             <div class="demo-label" style="margin-top: 16px;">Answer</div>
-            <p class="demo-answer" id="demo-answer">∠BAC = 60°</p>
+            <p class="demo-answer" id="demo-answer">125</p>
           </div>
         </div>
         <div class="demo-right">
-          <div class="demo-panel" style="max-height: 250px;">
+          <div class="demo-panel" style="max-height: 500px;">
             <div class="demo-panel-header">
               <i class="fas fa-align-left"></i>
-              Dense Caption (Qwen3-VL-Instruct)
+              Dense Caption (Qwen3-VL-235B-Thinking)
             </div>
-            <div class="demo-panel-content" id="demo-caption">
-### Image Category: Geometric Diagram
-
-**Scene Summary:** A triangle ABC with marked angles and equal side lengths.
+            <div class="demo-panel-content" id="demo-caption">### Image 1: Geometric Diagram
+**Scene Summary:** A geometric diagram depicting triangle $XYZ$ with internal cevians intersecting at point $P$, including a labeled segment length on side $XY$.
 
 **Explicit Component Breakdown:**
-- Triangle (ABC): Equilateral triangle outlined in black
-- Angle marker (∠ABC): Arc indicating 60° at vertex B
-- Side labels: AB and BC marked with tick marks indicating equality
-- Vertices: Points A, B, C labeled at corners
+* **Triangle Vertices (`X`):** Top vertex of the triangle.
+* **Triangle Vertices (`Y`):** Bottom-left vertex of the triangle.
+* **Triangle Vertices (`Z`):** Bottom-right vertex of the triangle.
+* **Side Points (`J`):** Point located on side $XY$, between $X$ and $Y$.
+* **Side Points (`K`):** Point located on side $YZ$, between $Y$ and $Z$.
+* **Side Points (`L`):** Point located on side $XZ$, between $X$ and $Z$.
+* **Intersection Point (`P`):** Central point where three internal cevians intersect.
+* **Segment Label (`8`):** Numeric label indicating the length of segment $XJ$.
 
 **Interactions and Relationships:**
-- AB connects vertices A and B
-- BC connects vertices B and C
-- Equal tick marks on AB and BC indicate isosceles property
+* Cevians connect vertex $X$ to point $K$ on side $YZ$, vertex $Y$ to point $L$ on side $XZ$, and vertex $Z$ to point $J$ on side $XY$.
+* All three cevians intersect at point $P$, dividing triangle $XYZ$ into six smaller triangular regions.
+* Segment $XJ$ is part of side $XY$ and is explicitly marked with length $8$.
+
+**Implicit and Inferred Properties:**
+* **Variable `$y$`:** The question text specifies finding `$y$`, which must represent an angle measure (in degrees) based on the provided choices (55, 115, 125, 135).
+* **Problem Context:** The diagram is associated with a geometry problem requiring application of theorems (e.g., Ceva’s Theorem, angle-chasing principles) to determine an unknown angle, though the specific angle corresponding to `$y$` is not labeled in the image.
+
+**Identified Ambiguities:**
+* The variable `$y$` referenced in the question is not explicitly labeled in the image, making it unclear which angle or segment it corresponds to.
             </div>
           </div>
-          <div class="demo-panel" style="flex: 2;">
+          <div class="demo-panel" style="flex: 2; max-height: 500px;">
             <div class="demo-panel-header">
               <i class="fas fa-brain"></i>
               Chain of Thought (Qwen3-VL-235B-Thinking)
             </div>
-            <div class="demo-panel-content" id="demo-cot">
-&lt;think&gt;
-1. **Analyze Input**: I see a triangle ABC where AB = BC (isosceles) and ∠ABC = 60°.
+            <div class="demo-panel-content" id="demo-cot">&lt;think&gt;Okay, let's try to figure out how to solve this problem. The question is asking for the value of the variable y, but wait, looking at the image, there's no 'y' labeled in the diagram. Hmm, maybe it's a typo? Wait, the choices are 55, 115, 125, 135. Let me check the image again.
+The diagram shows a triangle XYZ with points J, K, L on the sides. XJ is labeled 8. There are three cevians intersecting at point P. The problem mentions "the variable y", but the diagram has points labeled X, Y, Z, J, K, L, P. Maybe the variable y refers to an angle? The choices are all numbers that could be angle measures (they're between 55 and 135, which are common angle degrees).
 
-2. **Recall Properties**: In an isosceles triangle, the base angles are equal. Here, the base angles are ∠BAC and ∠BCA.
+Wait, maybe the problem was supposed to have a specific angle marked as y, but in the image provided, maybe there's an angle that's supposed to be y. Let me check again. The original problem statement says "Find the value of the variable y in the figure." But the image shows a triangle with cevians. Maybe it's a different problem where the image is missing some labels, but given the choices, it's likely an angle problem.
 
-3. **Apply Angle Sum Theorem**: The sum of angles in a triangle is 180°.
-   ∠BAC + ∠ABC + ∠BCA = 180°
-   ∠BAC + 60° + ∠BCA = 180°
+Wait, perhaps this is a problem involving the intersection of medians or angle bisectors, but the problem might be related to Ceva's Theorem or something else. Wait, but the choices are all angles, so maybe it's an angle formed at point P.
 
-4. **Use Isosceles Property**: Since AB = BC, we have ∠BAC = ∠BCA.
-   Let ∠BAC = ∠BCA = x
-   x + 60° + x = 180°
-   2x = 120°
-   x = 60°
+Alternatively, maybe the problem was misformatted, and the 'y' is actually a length, but the choices are numbers without units. Wait, the given length XJ is 8, but the choices are 55, etc., which are too big for a length if XJ is 8. So probably angles.
 
-5. **Verification**: All angles equal 60°, confirming this is actually an equilateral triangle.
+Wait, maybe the problem is from a different context where the figure has an angle marked as y, but in the image provided here, perhaps the user made a mistake. Wait, let's think again. The user provided the image, and the problem says "Find the value of the variable y in the figure." The choices are 55, 115, 125, 135.
+
+Wait, perhaps this is a problem where the figure is part of a larger question, but in the image, maybe there's an angle at point P or somewhere else. Wait, the problem might be a standard one where, for example, in a triangle with cevians intersecting, and some angles given, but in this image, there are no angles labeled. Hmm.
+
+Wait, maybe the problem is from a different source where the figure has an angle labeled y, but in the provided image, it's not visible. But the user says to integrate all information from multimodal inputs. Wait, the image shows triangle XYZ with cevians XJ, YK, ZL intersecting at P. XJ is 8 units. But the question is about variable y. Maybe the original problem had a different figure, but in this case, perhaps it's a mistake. Alternatively, maybe the variable y refers to the length of another segment, but the choices are 55 etc., which are way larger than 8, so that's unlikely.
+
+Wait, maybe it's a different problem where the figure is a triangle with some angles, and the 'y' is an angle measure. Let's think: if it's a triangle with three cevians intersecting, maybe it's about the sum of angles around point P. The sum of angles around a point is 360 degrees. If some angles are given, but in the image, there are no angles marked. Hmm.
+
+Wait, maybe the problem is actually from a different figure, but the user provided this image by mistake. Alternatively, maybe the variable y is related to the length of YZ or something, but the choices are 55 etc., which don't make sense for a length if XJ is 8. Unless it's a different unit, but the problem doesn't specify.
+
+Wait, another thought: maybe this is a problem involving the Law of Sines or Cosines in the sub-triangles. For example, if XJ = 8, and if J is the midpoint, but there's no indication of that. Or maybe the cevians are medians, but again, not specified.
+
+Wait, the problem might be a classic one where the intersection of cevians creates certain angle relationships. For example, in a triangle with three cevians intersecting at a point, the sum of certain angles is 180. But without specific angle measures given in the diagram, it's hard to see.
+
+Wait, the choices are all angles, so maybe it's an exterior angle problem. Let's consider triangle XYZ. Suppose angle at Y is something, but again, no data.
+
+Wait, maybe the problem is not about the diagram provided but the user made a mistake. But the instructions say to integrate all information from multimodal inputs, so the diagram must be relevant.
+
+Wait, perhaps the variable y is the measure of angle YPZ or something like that. Let's assume that. If the cevians are medians, then the angles formed might have specific properties, but without more info, it's hard.
+
+Alternatively, maybe this is a trick question where the answer is based on the number of segments. But the choices are 55, 115, etc.
+
+Wait, another approach: sometimes in multiple-choice questions, if the diagram has a length labeled 8, and the answer choices are angles, maybe it's a different problem where the 8 is a red herring, but that's unlikely.
+
+Wait, maybe the problem was supposed to include angle measures in the diagram, but they're missing in the image provided. For example, if angle at X is 25 degrees, and some other angles, then y could be calculated. But since the image doesn't show any angles, this is confusing.
+
+Wait, perhaps the problem is from a standard test where this figure is used with specific angle labels, but in this case, the labels are missing. Given that the choices are 55, 115, 125, 135, let's think about common angle problems.
+
+For example, if two lines intersect, vertical angles are equal, or supplementary angles sum to 180. If y is an angle that's supplementary to 65 degrees, then y would be 115. But where would 65 come from?
+
+Alternatively, in a triangle, the sum of angles is 180. If two angles are 25 and 40, the third is 115. But again, no data.
+
+Wait, maybe the length XJ = 8 is a distractor, and the actual problem is about a different figure. But the user says to use the image provided.
+
+Wait, let's read the problem again: "Find the value of the variable y in the figure. Choices: 55, 115, 125, 135."
+
+Given that the image shows a triangle with three cevians intersecting at P, and XJ = 8. Maybe the problem is actually about the length of YK or something, but the choices are numbers that don't match. Alternatively, maybe it's a misprint and the variable is 'x', but the choices are given as y.
+
+Alternatively, perhaps the problem is from a different context where the figure is part of a system of equations. Wait, this is getting too speculative.
+
+Wait, another angle: maybe the problem is related to the concept of concurrent cevians and using Ceva's Theorem. Ceva's Theorem states that for concurrent cevians, (XJ/JY) * (YK/KZ) * (ZL/LX) = 1. But we only know XJ =8, and no other lengths, so we can't apply that directly.
+
+Alternatively, if the cevians are medians, then J, K, L are midpoints, so XJ = JY, etc. But XJ is 8, so JY would be 8, making XY =16. But again, not related to the choices.
+
+Wait, the choices are all angles, so maybe it's a different problem where the figure is a triangle with an exterior angle. For example, if an exterior angle is equal to the sum of the two remote interior angles.
+
+Wait, let's think of a common problem: if in triangle XYZ, angle at X is 50 degrees, angle at Y is 15 degrees, then angle at Z is 115. But without given angles, this is a shot in the dark.
+
+Alternatively, maybe the point P creates vertical angles. Suppose one angle at P is 55, then the vertical angle is also 55, and the adjacent angles would be 125 (since 180-55=125). But why 125 would be the answer.
+
+Wait, the choices include 125 and 115. If two angles around point P are 55 and 55, then the other two would be 125 each. But without knowing which angle y is, it's hard.
+
+Wait, maybe the problem is from a specific textbook problem where this figure is used with angle labels. For example, if angle JPY is 55 degrees, then angle YPZ would be 180-55=125. But I'm just guessing.
+
+Alternatively, if the triangle is such that angle at Y is 55, then the exterior angle would be 125. But again, no info.
+
+Wait, given that the choices are 55, 115, 125, 135, let's consider that 180-55=125, 180-65=115, 180-45=135. So maybe it's a supplementary angle problem.
+
+If the variable y is an angle that's supplementary to 55, then y=125. But why 55?
+
+Alternatively, in a triangle with angles 25, 40, 115. Sum is 180.
+
+Wait, maybe the problem is related to the incenter or centroid, but again, no angle info.
+
+Wait, perhaps the length XJ=8 is irrelevant, and the problem is a standard angle question where the answer is 125. But why?
+
+Wait, another thought: maybe the problem was supposed to have a different image, but given the current image, there's no way to determine y. However, since it's a multiple-choice question with those options, and considering common problems, 125 is a common answer for an angle supplementary to 55.
+
+Alternatively, if the triangle has angles 25, 30, then the third is 125. But this is all guesswork.
+
+Wait, maybe the key is that the problem says "variable y", but in the diagram, the vertex is labeled Y. Maybe the angle at Y is y. If the triangle has some known properties.
+
+Wait, if XYZ is a triangle, and the cevians are angle bisectors, then maybe the angle at Y can be calculated. But without more info, it's impossible.
+
+Wait, perhaps the problem is from a specific example where, for instance, the measure of angle XPY is 55 degrees, and y is angle YPZ, which would be 180-55=125. So the answer is 125.
+
+Given that 125 is one of the choices, and this is a common type of problem where adjacent angles on a straight line sum to 180, I think the intended answer is 125.
+
+Let me check the choices again: 55, 115, 125, 135. If y is an angle that's supplementary to 55, then 125. If it's supplementary to 65, 115. But 55 is also a choice. Maybe the angle at P is 55, and y is the vertical angle, but no.
+
+Alternatively, in a triangle, exterior angle is sum of two non-adjacent. If two angles are 50 and 75, exterior is 125.
+
+Given that 125 is a common answer for such problems, and considering the options, I think the answer is 125.
 &lt;/think&gt;
 
-Therefore, the final answer is &lt;answer&gt;60°&lt;/answer&gt;
+### Phase 1: Comprehensive Information Extraction
+
+- **Textual Input**: The problem asks to find the value of variable $ y $ in the figure, with multiple-choice options: 55, 115, 125, 135.
+- **Visual Input**: The diagram shows triangle $ XYZ $ with cevians $ XJ $, $ YK $, and $ ZL $ intersecting at point $ P $. Segment $ XJ $ is labeled as 8 units. No angles are explicitly marked in the diagram.
+
+**Key Observations**:
+- The variable $ y $ is not directly labeled in the diagram, but the choices suggest it represents an angle measure (all values are between 55° and 135°).
+- The intersection of three cevians at point $ P $ forms several angles around $ P $, which sum to 360°.
+- Given that no specific angle measures are provided in the diagram, the solution must rely on standard geometric relationships involving intersecting lines and supplementary angles.
+
+---
+
+### Phase 2: Strategic Problem Setup
+
+- **Objective**: Determine the value of $ y $, likely representing an angle formed by the intersection of cevians.
+- **Assumptions**:
+- Since the diagram contains no explicit angle labels, the problem likely assumes knowledge of a common geometric configuration where one angle is known or implied (e.g., from typical textbook problems).
+- A common scenario involves two adjacent angles forming a straight line, where one is given or implied, and the other is calculated using the property that supplementary angles sum to 180°.
+- **Relevant Principle**: If two angles form a linear pair (i.e., lie on a straight line), their measures add up to 180°.
+
+---
+
+### Phase 3: Rigorous Solution Execution
+
+- **Step 1**: Consider the point $ P $, where the cevians intersect. This creates four angles around point $ P $, each pair of adjacent angles forming a linear pair.
+- **Step 2**: Assume that one of these angles is 55° (a common value in such problems). Then, the angle adjacent to it (forming a linear pair) would be:
+$$
+180^\circ - 55^\circ = 125^\circ
+$$
+- **Step 3**: Given the multiple-choice options, 125° is among them and aligns with this reasoning.
+- **Step 4**: This interpretation is consistent with standard geometry problems where the unknown angle is the supplement of a given angle.
+
+---
+
+### Phase 4: Solution Validation
+
+- The calculated value $ 125^\circ $ matches one of the provided choices.
+- It logically follows from the assumption that the angle $ y $ is the supplement of a 55° angle, a common setup in angle problems involving intersecting lines.
+- The absence of explicit angle markings in the diagram does not invalidate the solution, as the problem's context implies a standard geometric relationship.
+
+Therefore, the final answer is &lt;answer&gt;125&lt;/answer&gt;.
             </div>
           </div>
         </div>
@@ -2194,9 +2623,9 @@ Therefore, the final answer is &lt;answer&gt;60°&lt;/answer&gt;
     <div class="container">
       <div class="footer-links">
         <a href="#"><i class="ai ai-arxiv"></i> arXiv</a>
-        <a href="#"><i class="fab fa-github"></i> GitHub</a>
-        <a href="#">🤗 Hugging Face</a>
-        <a href="mailto:heconghui@pjlab.org.cn"><i class="fas fa-envelope"></i> Contact</a>
+        <a href="https://github.com/MMFineReason/MMFineReason"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://huggingface.co/collections/OpenDataArena/mmfinereason">🤗 Hugging Face</a>
+        <a href="mailto:wulijun@pjlab.org.cn"><i class="fas fa-envelope"></i> Contact</a>
       </div>
       <p class="footer-copy">
         © 2026 Shanghai AI Laboratory & OpenDataLab. All rights reserved.
@@ -2214,135 +2643,32 @@ Therefore, the final answer is &lt;answer&gt;60°&lt;/answer&gt;
       // Demo content data
       const demos = {
         math: {
-          question: "In the given diagram, if ∠ABC = 60° and AB = BC, find the value of ∠BAC.",
-          answer: "∠BAC = 60°",
-          caption: `### Image Category: Geometric Diagram
-
-**Scene Summary:** A triangle ABC with marked angles and equal side lengths.
-
-**Explicit Component Breakdown:**
-- Triangle (ABC): Equilateral triangle outlined in black
-- Angle marker (∠ABC): Arc indicating 60° at vertex B
-- Side labels: AB and BC marked with tick marks indicating equality
-
-**Interactions and Relationships:**
-- Equal tick marks on AB and BC indicate isosceles property`,
-          cot: `<think>
-1. **Analyze Input**: I see a triangle ABC where AB = BC (isosceles) and ∠ABC = 60°.
-
-2. **Recall Properties**: In an isosceles triangle, the base angles are equal.
-
-3. **Apply Angle Sum Theorem**: 
-   ∠BAC + ∠ABC + ∠BCA = 180°
-   ∠BAC + 60° + ∠BCA = 180°
-
-4. **Use Isosceles Property**: Since AB = BC:
-   Let ∠BAC = ∠BCA = x
-   2x + 60° = 180°
-   x = 60°
-
-5. **Verification**: All angles equal 60° ✓
-</think>
-
-Therefore, the final answer is <answer>60°</answer>`
+          image: "static/assets/math.jpg",
+          question: "<image>Find the value of the variable $y$ in the figure.\nChoices:\n55\n115\n125\n135",
+          answer: "125",
+          caption: `### Image 1: Geometric Diagram\n\n**Scene Summary:** A geometric diagram depicting triangle $XYZ$ with internal cevians intersecting at point $P$, including a labeled segment length on side $XY$.\n\n**Explicit Component Breakdown:**\n* **Triangle Vertices (X):** Top vertex of the triangle.\n* **Triangle Vertices (Y):** Bottom-left vertex of the triangle.\n* **Triangle Vertices (Z):** Bottom-right vertex of the triangle.\n* **Side Points (J):** Point located on side $XY$, between $X$ and $Y$.\n* **Side Points (K):** Point located on side $YZ$, between $Y$ and $Z$.\n* **Side Points (L):** Point located on side $XZ$, between $X$ and $Z$.\n* **Intersection Point (P):** Central point where three internal cevians intersect.\n* **Segment Label (8):** Numeric label indicating the length of segment $XJ$.\n\n**Interactions and Relationships:**\n* Cevians connect vertex $X$ to point $K$ on side $YZ$, vertex $Y$ to point $L$ on side $XZ$, and vertex $Z$ to point $J$ on side $XY$.\n* All three cevians intersect at point $P$, dividing triangle $XYZ$ into six smaller triangular regions.\n* Segment $XJ$ is part of side $XY$ and is explicitly marked with length $8$.\n\n**Implicit and Inferred Properties:**\n* **Variable $y$:** The question text specifies finding $y$, which must represent an angle measure (in degrees) based on the provided choices (55, 115, 125, 135).\n* **Problem Context:** The diagram is associated with a geometry problem requiring application of theorems (e.g., Ceva’s Theorem, angle-chasing principles) to determine an unknown angle, though the specific angle corresponding to $y$ is not labeled in the image.\n\n**Identified Ambiguities:**\n* The variable $y$ referenced in the question is not explicitly labeled in the image, making it unclear which angle or segment it corresponds to.`,
+          cot: `<think>Okay, let's try to figure out how to solve this problem. The question is asking for the value of the variable y, but wait, looking at the image, there's no 'y' labeled in the diagram. Hmm, maybe it's a typo? Wait, the choices are 55, 115, 125, 135. Let me check the image again.\nThe diagram shows a triangle XYZ with points J, K, L on the sides....</think>\n\n### Phase 1: Comprehensive Information Extraction\n- **Textual Input**: The problem asks to find the value of variable $ y $ in the figure, with multiple-choice options: 55, 115, 125, 135.\n- **Visual Input**: The diagram shows triangle $ XYZ $ with cevians $ XJ $, $ YK $, and $ ZL $ intersecting at point $ P $. Segment $ XJ $ is labeled as 8 units. No angles are explicitly marked in the diagram.\n\n**Key Observations**:\n- The variable $ y $ is not directly labeled in the diagram, but the choices suggest it represents an angle measure (all values are between 55° and 135°).\n- The intersection of three cevians at point $ P $ forms several angles around $ P $, which sum to 360°.\n- Given that no specific angle measures are provided in the diagram, the solution must rely on standard geometric relationships involving intersecting lines and supplementary angles.\n\n### Phase 2: Strategic Problem Setup\n- **Objective**: Determine the value of $ y $, likely representing an angle formed by the intersection of cevians.\n- **Assumptions**:\n- Since the diagram contains no explicit angle labels, the problem likely assumes knowledge of a common geometric configuration where one angle is known or implied (e.g., from typical textbook problems).\n- A common scenario involves two adjacent angles forming a straight line, where one is given or implied, and the other is calculated using the property that supplementary angles sum to 180°.\n- **Relevant Principle**: If two angles form a linear pair (i.e., lie on a straight line), their measures add up to 180°.\n\n### Phase 3: Rigorous Solution Execution\n- **Step 1**: Consider the point $ P $, where the cevians intersect. This creates four angles around point $ P $, each pair of adjacent angles forming a linear pair.\n- **Step 2**: Assume that one of these angles is 55° (a common value in such problems). Then, the angle adjacent to it (forming a linear pair) would be:\n$$\n180^\circ - 55^\circ = 125^\circ\n$$\n- **Step 3**: Given the multiple-choice options, 125° is among them and aligns with this reasoning.\n- **Step 4**: This interpretation is consistent with standard geometry problems where the unknown angle is the supplement of a given angle.\n\n### Phase 4: Solution Validation\n- The calculated value $ 125^\circ $ matches one of the provided choices.\n- It logically follows from the assumption that the angle $ y $ is the supplement of a 55° angle, a common setup in angle problems involving intersecting lines.\n- The absence of explicit angle markings in the diagram does not invalidate the solution, as the problem's context implies a standard geometric relationship.\n\nTherefore, the final answer is <answer>125</answer>.`
         },
         science: {
-          question: "A block of mass 5kg is placed on a frictionless surface. Two forces F₁ = 20N (right) and F₂ = 10N (left) act on it. Calculate the acceleration.",
-          answer: "a = 2 m/s² (to the right)",
-          caption: `### Image Category: Physics / Mechanics Diagram
-
-**Scene Summary:** A free-body diagram showing a block with two opposing horizontal forces.
-
-**Explicit Component Breakdown:**
-- Block: Rectangular object labeled "5 kg"
-- Force F₁: Arrow pointing right, labeled "20N"
-- Force F₂: Arrow pointing left, labeled "10N"
-- Surface: Horizontal line with "frictionless" annotation`,
-          cot: `<think>
-1. **Extract Given Information**:
-   - Mass m = 5 kg
-   - Force F₁ = 20 N (rightward, positive direction)
-   - Force F₂ = 10 N (leftward, negative direction)
-   - Frictionless surface (no friction force)
-
-2. **Calculate Net Force**:
-   F_net = F₁ - F₂
-   F_net = 20 N - 10 N = 10 N (rightward)
-
-3. **Apply Newton's Second Law**:
-   F = ma
-   a = F_net / m
-   a = 10 N / 5 kg
-   a = 2 m/s²
-
-4. **Verify Units**: N/kg = (kg·m/s²)/kg = m/s² ✓
-</think>
-
-Therefore, the final answer is <answer>2 m/s²</answer>`
+          image: "static/assets/science.jpg",
+          question: "<image>The figure shows a reflex arc model, where 1 to 7 represent different structures within the reflex arc. Which of the following statements is incorrect?\nA. 6 is the cell body of the motor neuron, and the most prominent structure in it is the cell nucleus.\nB. Applying an appropriate electrical stimulus at site 4 can result in a detectable potential change at site 2.\nC. 3 is a lower neural center, and its physiological activity is regulated by higher neural centers.\nD. Structure 5 is more complex than structure 1, and the neurotransmitter released by 7 does not necessarily cause excitation of 6.",
+          answer: "B",
+          caption: `### Image 1: Biological Structure\n\n**Scene Summary:** A labeled diagram illustrating the anatomical components of a reflex arc, with numbered structures 1–7 depicting the neural pathway from sensory input to motor output.\n\n**Explicit Component Breakdown:**\n* **Sensory Receptor Structure (1):** A layered, textured structure resembling skin or epithelial tissue, positioned at the leftmost end of the pathway.\n* **Sensory Neuron (2):** A long neuron extending from structure 1, featuring a prominent oval-shaped cell body (with a visible nucleus) located outside the central nervous system.\n* **Spinal Cord Cross-Section (3):** A butterfly-shaped gray matter region enclosed within a white matter boundary, representing the central processing area.\n* **Motor Neuron (4):** A neuron originating from the spinal cord (3) and extending toward structure 5, with no visible cell body along its length in the diagram.\n* **Effector Muscle (5):** A striped, bundle-like structure resembling skeletal muscle tissue at the rightmost end of the pathway.\n* **Synaptic Region (6):** A small, darkened circular structure within the spinal cord’s gray matter, adjacent to the motor neuron’s origin.\n* **Neurotransmitter Release Site (7):** A small terminal structure near 6 within the spinal cord, connected to the motor neuron’s dendrites.\n\n**Interactions and Relationships:**\n* The sensory neuron (2) connects the sensory receptor (1) to the spinal cord (3), entering via the dorsal root.\n* Within the spinal cord, the sensory neuron synapses with the motor neuron through structures 6 and 7, forming a relay point in the gray matter.\n* The motor neuron (4) exits the spinal cord via the ventral root and connects to the effector muscle (5).\n* Directional flow is implied from 1 → 2 → (6/7) → 4 → 5, with no visible feedback loops or intermediate interneurons.\n\n**Implicit and Inferred Properties:**\n* **Reflex Arc Pathway:** Structure 1 is the sensory receptor; 2 is the afferent (sensory) neuron; 3 is the spinal cord (low-level neural center); 4 is the efferent (motor) neuron; 5 is the effector organ (muscle).\n* **Synaptic Structures:** 6 represents the cell body of the motor neuron; 7 represents the synaptic cleft where neurotransmitters are released.\n* **Physiological Roles:** The pathway operates as a monosynaptic reflex arc; structure 3 is subject to modulation by higher brain centers.\n* **Neurotransmitter Action:** Neurotransmitters released at 7 may excite or inhibit the motor neuron (6).\n\n**Identified Ambiguities:**\n* None. All labels (1–7) are clearly marked, and the question text provides sufficient context to resolve functional roles.`,
+          cot: `<think>Okay, let's tackle this problem. So, we have a diagram of a reflex arc with labels 1 to 7, and we need to find which statement is incorrect. The options are A to D. Let me start by recalling what a reflex arc consists of...</think>\n\n### Phase 1: Comprehensive Information Extraction\nThe diagram depicts a **reflex arc** with labeled structures:\n- **1**: Receptor (sensory organ, e.g., skin or muscle spindle).\n- **2**: Sensory (afferent) neuron, with its cell body in the dorsal root ganglion (the circular structure with a dot).\n- **3**: Spinal cord gray matter (central nervous system component, acting as a low-level neural center).\n- **4**: Motor (efferent) neuron axon.\n- **5**: Effector (e.g., skeletal muscle).\n- **6**: Cell body of the motor neuron (located in the ventral horn of the spinal cord).\n- **7**: Synapse between the sensory neuron and motor neuron (or interneuron).\n\nKey biological principles:\n- Reflex arcs are **unidirectional** due to synapses (neurotransmitter release only from presynaptic to postsynaptic neurons).\n- Sensory neurons transmit signals **toward** the CNS; motor neurons transmit signals **away** from the CNS.\n- Spinal cord (3) is a low-level center modulated by higher brain centers.\n- Neurotransmitters at synapses (7) can be excitatory or inhibitory.\n\n---\n\n### Phase 2: Strategic Problem Setup\nThe question asks for the **incorrect statement** among options A–D. Each option must be evaluated against the reflex arc structure and neurophysiological principles.\n\n**Extracted facts from the diagram and options**:\n- A: 6 = motor neuron cell body (contains nucleus).\n- B: Stimulating 4 (motor axon) → detect potential change at 2 (sensory neuron).\n- C: 3 (spinal cord) is a low-level center under higher brain control.\n- D: 5 (effector) is more complex than 1 (receptor); 7 releases neurotransmitters that may not excite 6.\n\n---\n\n### Phase 3: Rigorous Solution Execution\n#### Option A\n- **6** is the motor neuron cell body (ventral horn of spinal cord).\n- Motor neuron cell bodies contain prominent structures like the **nucleus**, endoplasmic reticulum, and Golgi apparatus.\n- **Conclusion**: A is **correct**.\n\n#### Option B\n- **4** is the motor neuron axon (efferent pathway).\n- Synapses (e.g., at **7**) are **unidirectional**: signals travel from sensory neuron → motor neuron, not vice versa.\n- Stimulating **4** would propagate action potentials **toward 5** (effector), but **not backward to 2** (sensory neuron), due to synaptic directionality.\n- **Conclusion**: B is **incorrect**.\n\n#### Option C\n- **3** (spinal cord gray matter) is a low-level neural center.\n- Higher brain centers (e.g., motor cortex) modulate spinal reflexes.\n- **Conclusion**: C is **correct**.\n\n#### Option D\n- **5** (effector, e.g., skeletal muscle) has complex structures, whereas **1** (receptor) is relatively simpler.\n- **7** (synapse) releases neurotransmitters that can be **excitatory or inhibitory**.\n- **Conclusion**: D is **correct**.\n\n---\n\n### Phase 4: Solution Validation\n- Only **B** contradicts neurophysiological principles.\n- All other options align with reflex arc anatomy and function.\n\nTherefore, the final answer is <answer>B</answer>.`
         },
         puzzle: {
-          question: "In this 3×3 pattern matrix, identify the rule and select the missing element from options A, B, C, D.",
-          answer: "Option C",
-          caption: `### Image Category: Puzzle / Logic Diagram
-
-**Scene Summary:** A Raven's Progressive Matrix with 8 filled cells and 1 missing.
-
-**Explicit Component Breakdown:**
-- Grid: 3×3 matrix with bottom-right cell marked "?"
-- Row 1: Circle, Square, Triangle
-- Row 2: Square, Triangle, Circle
-- Row 3: Triangle, Circle, ?
-- Options: A (Square), B (Triangle), C (Square rotated), D (Circle)`,
-          cot: `<think>
-1. **Identify Pattern Type**: Each row contains all three shapes exactly once.
-
-2. **Analyze Rows**:
-   - Row 1: {Circle, Square, Triangle} ✓
-   - Row 2: {Square, Triangle, Circle} ✓
-   - Row 3: {Triangle, Circle, ?}
-
-3. **Apply Row Completion Rule**:
-   Row 3 has Triangle and Circle, missing Square.
-
-4. **Verify with Columns**:
-   - Col 1: {Circle, Square, Triangle} ✓
-   - Col 2: {Square, Triangle, Circle} ✓
-   - Col 3: {Triangle, Circle, Square} - needs Square
-
-5. **Check Options**: Option C shows a Square.
-</think>
-
-Therefore, the final answer is <answer>C</answer>`
+          image: "static/assets/puzzle.jpg",
+          question: "<image> Xiao Ming accidentally broke a triangular piece of glass into four pieces as shown in the figure (labeled 1, 2, 3, and 4). Which of these pieces should be taken to get a new triangular glass of the same size as the original? Which piece(s) should be taken?\nA. Piece 1\nB. Piece 2\nC. Piece 3\nD. Piece 4",
+          answer: "D",
+          caption: "### Image 1: Puzzle / Logic Diagram\n**Scene Summary:** The image presents a visual logic puzzle where the third element in the second sequence must be determined by identifying the pattern established in the first sequence of three symbols.\n\n**Explicit Component Breakdown:**\n* **First Sequence, Box 1 Top (`None`):** Striped circle shape with a diagonal stripe pattern.\n* **First Sequence, Box 1 Bottom (`None`):** Inverted \"Z\"-shaped line.\n* **First Sequence, Box 2 Top (`None`):** White cup-shaped figure (U-shaped with a vertical stem).\n* **First Sequence, Box 2 Bottom (`None`):** U-shaped base with a vertical stem.\n* **First Sequence, Box 3 Top (`None`):** Striped cup-shaped figure (U-shaped with a vertical stem, matching Box 2’s shape but with Box 1’s stripe pattern).\n* **First Sequence, Box 3 Bottom (`None`):** Inverted \"Z\"-shaped line (identical to Box 1’s bottom).\n* **Second Sequence, Box 1 Top (`None`):** White rectangle with a vertical stem (signpost shape).\n* **Second Sequence, Box 1 Bottom (`None`):** Black filled rectangle.\n* **Second Sequence, Box 2 Top (`None`):** Striped rectangle with a vertical stem (signpost shape with diagonal stripes).\n* **Second Sequence, Box 2 Bottom (`None`):** White oval.\n* **Second Sequence, Box 3 Top (`?`):** Missing element (denoted by \"?\").\n* **Second Sequence, Box 3 Bottom (`?`):** Missing element (denoted by \"?\").\n* **Option A Top (`None`):** Striped rectangle with a vertical stem.\n* **Option A Bottom (`None`):** White oval.\n* **Option B Top (`None`):** White rectangle with a vertical stem.\n* **Option B Bottom (`None`):** Black filled oval.\n* **Option C Top (`None`):** Striped rectangle with a vertical stem.\n* **Option C Bottom (`None`):** White trapezoid.\n* **Option D Top (`None`):** White rectangle with a vertical stem.\n* **Option D Bottom (`None`):** Black filled rectangle.\n\n**Interactions and Relationships:**\n* In the first sequence, Box 3’s top component combines the **shape** of Box 2’s top (cup) with the **stripe pattern** of Box 1’s top (striped circle).\n* Box 3’s bottom component in the first sequence exactly matches Box 1’s bottom component (inverted \"Z\"-shaped line).\n* In the second sequence, Box 3’s top component must adopt Box 2’s shape (rectangle with stem) and Box 1’s pattern (no stripes), while Box 3’s bottom component must match Box 1’s bottom (black filled rectangle).\n* The answer options are spatially arranged in a 2x2 grid below the main puzzle, with labels \"A\", \"B\", \"C\", and \"D\" beneath each option.\n\n**Implicit and Inferred Properties:**\n* **Pattern Rule:** The third element in each sequence is formed by merging the top shape of the second element with the stripe pattern of the first element, while retaining the bottom shape of the first element.\n* **Answer Validation:** The correct choice must replicate the pattern observed in the first sequence, requiring the top component to be unstriped (from Box 1) and the bottom component to match Box 1’s black rectangle.\n\n**Identified Ambiguities:**\n* None.",
+          cot: "<think>Okay, let's try to figure out this problem. So, there are two sets of three boxes each. The first set on the left has three images, and the second set on the right has two images and a question mark.\n...\n</think>\n\n### Phase 1: Comprehensive Information Extraction\nThe problem consists of two sets of three figures each. The left set contains three figures, and the right set contains two figures with a missing third. The goal is to determine the correct figure for the missing position in the right set based on the pattern established in the left set.\n\n**Left Set Analysis:**\n- **Figure 1:** Top = striped circle; Bottom = Z-shaped base\n- **Figure 2:** Top = white tulip-shaped object; Bottom = U-shaped base\n- **Figure 3:** Top = striped tulip-shaped object; Bottom = Z-shaped base\n\n**Key Observations:**\n- The **top** of Figure 3 combines the **shape** of Figure 2 (tulip) with the **pattern** (striped) from Figure 1.\n- The **bottom** of Figure 3 matches the **bottom** of Figure 1 (Z-shaped).\n\nThis suggests a consistent rule:\n> **Third figure = (Top: Shape from second figure + Pattern from first figure) + (Bottom: Bottom from first figure)**\n\n---\n\n### Phase 2: Strategic Problem Setup\nApply the same rule to the **right set**:\n- **Figure 1:** Top = white rectangle (with vertical line); Bottom = black rectangle\n- **Figure 2:** Top = striped rectangle (same shape as Figure 1); Bottom = white oval\n- **Missing Figure 3:** Should follow the same logic as the left set.\n\n**Expected Components for Missing Figure:**\n- **Top:** Shape from Figure 2 (rectangle with vertical line) + Pattern from Figure 1 (white) → **White rectangle with vertical line**\n- **Bottom:** Bottom from Figure 1 → **Black rectangle**\n\n---\n\n### Phase 3: Rigorous Solution Execution\n**Evaluate Options:**\n- **A:** Striped top, oval bottom → Incorrect (top pattern and bottom shape do not match expected values).\n- **B:** White top, black oval bottom → Incorrect (bottom should be black rectangle, not oval).\n- **C:** Striped top, trapezoid bottom → Incorrect (both top pattern and bottom shape are wrong).\n- **D:** White top, black rectangle bottom → **Correct** (matches both expected components).\n\n---\n\n### Phase 4: Solution Validation\n- The derived rule is consistent across both sets.\n- All visual elements align with the expected transformation.\n- Option D is the only one that satisfies the pattern: white top (from Figure 1's pattern), black rectangle bottom (from Figure 1's bottom).\n\nTherefore, the final answer is <answer>Option D</answer>"
         },
         game: {
-          question: "In this chess position, it's White's turn. Find the best move that leads to checkmate in 2 moves.",
-          answer: "Qh7+ (Queen to h7 with check)",
-          caption: `### Image Category: Game State Diagram
-
-**Scene Summary:** A chess endgame position with White to move.
-
-**Explicit Component Breakdown:**
-- White pieces: King (g1), Queen (d1), Rook (f1)
-- Black pieces: King (g8), Pawn (f7, g7, h7)
-- Board orientation: White at bottom`,
-          cot: `<think>
-1. **Assess Position**: Black king is confined to back rank with pawns blocking escape.
-
-2. **Identify Tactical Motif**: Back-rank weakness + Queen/Rook battery potential.
-
-3. **Calculate Candidate Moves**:
-   - Qh7+? King must take (Kxh7)
-   - Then Rf8# is checkmate!
-
-4. **Verify Line**:
-   Move 1: Qh7+ Kxh7 (forced)
-   Move 2: Rf8# (Rook delivers checkmate on back rank)
-
-5. **Alternative Check**: If Qh7+ and Black plays g6 instead?
-   - Not legal, pawn is pinned or blocked.
-</think>
-
-Therefore, the final answer is <answer>Qh7+</answer>`
+          image: "static/assets/game.jpg",
+          question: "<image>**Rules:**\n1. This is a maze mini-game. The player needs to navigate around obstacles to reach the destination and achieve victory.\n2. The red circle represents the player, the green block is the goal and the blue blocks are obstacles.\n3. The player can only move within the white blocks.\n4. The coordinates are given in the format (row, col), where row represents the vertical position and col represents the horizontal position.\n\n**Question:** Which sequence of movements will allow the player to reach the destination?\n\n**Options:**\nA. up, right, up, down, right, up, up, left, down, up, right, right, up, down, down, left, left, up, left, right, up, left, up, right, left\nB. left, down, down, down, down, up, up, down, right, up, up, left, down, right, left, down, up, up, left, down, right, up, left, right, left\nC. down, left, left, up, right, left, up, down, up, down, right, right, down, down, up, right, right, right, down, right, left, down, right, right, down\nD. right, right, down, down, right, right, down, down, down, down, left, left, up, up, left, left, down, down, left, left, up, up, left, left\nE. right, right, up, left, up, up, down, right, right, right, left, up, up, right, left, right, down, up, down, down, up, up, left, left, down",
+          answer: "D",
+          caption: `### Image 1: Puzzle / Logic Diagram\n\n**Scene Summary:** A grid-based maze with coordinate axes where a player (red circle) must navigate through white pathways to reach a green goal block while avoiding blue obstacle blocks.\n\n**Explicit Component Breakdown:**\n* **Coordinate Axis Labels (\`0-10\`):** Numerical labels along the top (columns 0–10) and left side (rows 0–10) defining the grid’s coordinate system.\n* **Blue Blocks (\`None\`):** Light blue-filled grid cells forming the maze’s obstacle walls, spanning multiple rows and columns.\n* **White Pathways (\`None\`):** Unfilled grid cells representing traversable paths within the maze.\n* **Red Circle (\`None\`):** A circular marker at coordinate (3,5) indicating the player’s starting position.\n* **Green Block (\`None\`):** A square marker at coordinate (7,2) indicating the destination goal.\n\n**Interactions and Relationships:**\n* The blue blocks form a continuous maze structure that partitions the grid into discrete white pathways.\n* The red circle is enclosed within a white pathway region at (3,5), surrounded by blue blocks to the north, south, and east, with a white path extending westward.\n* The green block at (7,2) is accessible via a white pathway connected to the lower-left section of the maze.\n* Movement is restricted to orthogonal (up/down/left/right) transitions between adjacent white cells; blue blocks act as impassable barriers.\n\n**Implicit and Inferred Properties:**\n* **Player (Red Circle):** Must move only through white pathways to reach the green block; movement directions are constrained to up, down, left, or right.\n* **Goal (Green Block):** Represents the victory condition; location is fixed at coordinate (7,2).\n* **Obstacles (Blue Blocks):** Impassable terrain; movement into these cells is invalid.\n* **Coordinate System:** Positions follow (row, col) format where row indicates vertical position (0 at top, 10 at bottom) and col indicates horizontal position (0 at left, 10 at right).\n* **Movement Rules:** Each step in the sequence must transition to an adjacent white cell; sequences containing invalid moves (e.g., into blue blocks or out-of-bounds) are non-viable.\n\n**Identified Ambiguities:**\n* None.`,
+          cot: `<think>Okay, let's tackle this maze problem. So, first, I need to figure out the correct path from the red circle (player) to the green block (goal). The coordinates are given as (row, col), with row 0 at the top and col 0 on the left.\nLooking at the image: the red circle is at some position. Let me check the grid. The rows go from 0 to 10 vertically, columns 0 to 10 horizontally. The red circle is in row 3, column 5. The green block is at row 7, column 2.\nThe player can only move on white blocks. The blue blocks are obstacles. So, the path must stay on white.\nLet me sketch the maze mentally. The red dot is at (3,5). The green is at (7,2). Let's see the possible paths...</think>\n\n### Phase 1: Comprehensive Information Extraction\n- **Grid Dimensions**: 11x11 (rows 0–10, columns 0–10).\n- **Player Position**: Red circle at (3, 5).\n- **Goal Position**: Green block at (7, 2).\n- **Obstacles**: Blue blocks; movement is restricted to white cells only.\n- **Movement Rules**: Player can move one cell at a time in four directions: up, down, left, right.\n- **Options Provided**: Five sequences of movements (A–E), each consisting of directional steps.\n---\n### Phase 2: Strategic Problem Setup\nThe objective is to determine which sequence of movements leads the player from (3, 5) to (7, 2), staying strictly within white blocks and avoiding blue obstacles. The correct path must:\n- Start at (3, 5).\n- End at (7, 2).\n- Only traverse white cells.\n- Match the sequence of moves provided in one of the options.\n---\n### Phase 3: Rigorous Solution Execution\n#### Step-by-step Simulation of Option D\n**Option D:**\n> right, right, down, down, right, right, down, down, down, down, left, left, up, up, left, left, down, down, left, left, up, up, left, left\nWe simulate the movement step-by-step from (3, 5):\n| Step | Direction | New Position | Valid? | Notes |\n|------|-----------|--------------|--------|-------|\n| 1 | right | (3, 6) | ✅ | White cell |\n| 2 | right | (3, 7) | ✅ | White cell |\n| 3 | down | (4, 7) | ✅ | White cell |\n| 4 | down | (5, 7) | ✅ | White cell |\n| 5 | right | (5, 8) | ✅ | White cell |\n| 6 | right | (5, 9) | ✅ | White cell |\n| 7 | down | (6, 9) | ✅ | White cell |\n| 8 | down | (7, 9) | ✅ | White cell |\n| 9 | down | (8, 9) | ✅ | White cell |\n| 10 | down | (9, 9) | ✅ | White cell |\n| 11 | left | (9, 8) | ✅ | White cell |\n| 12 | left | (9, 7) | ✅ | White cell |\n| 13 | up | (8, 7) | ✅ | White cell |\n| 14 | up | (7, 7) | ✅ | White cell |\n| 15 | left | (7, 6) | ✅ | White cell |\n| 16 | left | (7, 5) | ✅ | White cell |\n| 17 | down | (8, 5) | ✅ | White cell |\n| 18 | down | (9, 5) | ✅ | White cell |\n| 19 | left | (9, 4) | ✅ | White cell |\n| 20 | left | (9, 3) | ✅ | White cell |\n| 21 | up | (8, 3) | ✅ | White cell |\n| 22 | up | (7, 3) | ✅ | White cell |\n| **23** | **left** | **(7, 2)** | ✅ | **Goal reached!** |\nAt step 23, the player reaches the green block at (7, 2), which is the destination. The remaining move (step 24) is not required for success but does not invalidate the path since the goal is already achieved.\n#### Validation Against Other Options\n- **Option A**: Contains loops and redundant movements that do not lead directly to the goal.\n- **Option B**: Involves backtracking and fails to reach the goal due to dead ends.\n- **Option C**: Leads into a loop and does not reach (7, 2).\n- **Option E**: Includes invalid moves (e.g., moving into likely blue cells at row 0), causing early termination.\nOnly **Option D** results in a valid, continuous path from start to finish without violating movement rules.\n---\n### Phase 4: Solution Validation\n- The simulation confirms that Option D reaches the goal at (7, 2) after 23 steps.\n- All intermediate positions are within white blocks.\n- No other option provides a valid, unobstructed path to the destination.\n- The logic aligns with the grid structure and movement constraints.\nTherefore, the final answer is <answer>D</answer>.`
         }
       };
 
@@ -2352,6 +2678,10 @@ Therefore, the final answer is <answer>Qh7+</answer>`
       document.getElementById('demo-answer').textContent = demo.answer;
       document.getElementById('demo-caption').textContent = demo.caption;
       document.getElementById('demo-cot').innerHTML = demo.cot.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      
+      // Update image
+      const imgContainer = document.getElementById('demo-image');
+      imgContainer.innerHTML = `<img src="${demo.image}" alt="${type} demo" style="max-width:100%; max-height:100%; border-radius:8px;">`;
     }
 
     // Copy citation
