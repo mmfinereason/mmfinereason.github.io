@@ -877,6 +877,11 @@
     }
 
     .demo-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: var(--color-text-muted);
       text-align: center;
       font-size: 14px;
@@ -891,9 +896,12 @@
 
     /* 【新增】控制 JS 动态插入的图片样式 */
     .demo-image-placeholder img {
-      transition: transform 0.4s ease; /* 0.4秒平滑过渡 */
-      cursor: zoom-in; /* 鼠标放上去显示放大镜图标 */
-      transform-origin: center center; /* 从中心放大 */
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.4s ease;
+      cursor: zoom-in;
+      transform-origin: center center;
     }
 
     /* 【新增】鼠标悬浮时的状态 */
@@ -1846,7 +1854,6 @@
           <thead>
             <tr>
               <th>Model</th>
-              <th>Size</th>
               <th>MMMU</th>
               <th>MathVista</th>
               <th>MathVision</th>
@@ -1867,7 +1874,6 @@
           <tbody>
             <tr>
               <td class="model-name">Qwen3-VL-32B-Thinking</td>
-              <td>32B</td>
               <td>78.1</td>
               <td>85.9</td>
               <td>70.2</td>
@@ -1885,8 +1891,7 @@
               <td>77.9</td>
             </tr>
             <tr>
-              <td class="model-name">GPT5-mini</td>
-              <td>-</td>
+              <td class="model-name">GPT5-mini-high</td>
               <td>79.0</td>
               <td>79.1</td>
               <td>71.9</td>
@@ -1908,7 +1913,6 @@
                 <span class="model-badge">Ours</span>
                 MMFineReason-8B
               </td>
-              <td>8B</td>
               <td>71.3</td>
               <td>81.7</td>
               <td>67.1</td>
@@ -1927,7 +1931,6 @@
             </tr>
             <tr>
               <td class="model-name">Gemini-2.5-Flash</td>
-              <td>-</td>
               <td>77.7</td>
               <td>79.4</td>
               <td>64.3</td>
@@ -1946,7 +1949,6 @@
             </tr>
             <tr>
               <td class="model-name">Qwen3-VL-30B-A3B-Thinking</td>
-              <td>30B</td>
               <td>76.0</td>
               <td>81.9</td>
               <td>65.7</td>
@@ -1968,7 +1970,6 @@
                 <span class="model-badge">Ours</span>
                 MMFineReason-4B
               </td>
-              <td>4B</td>
               <td>69.6</td>
               <td>82.2</td>
               <td>61.3</td>
@@ -1987,7 +1988,6 @@
             </tr>
             <tr>
               <td class="model-name">Qwen3-VL-8B-Thinking</td>
-              <td>8B</td>
               <td>74.1</td>
               <td>81.4</td>
               <td>62.7</td>
@@ -2006,7 +2006,6 @@
             </tr>
             <tr>
               <td class="model-name">MMR1-8B</td>
-              <td>8B</td>
               <td>62.8</td>
               <td>75.3</td>
               <td>48.4</td>
@@ -2028,7 +2027,6 @@
                 <span class="model-badge">Ours</span>
                 MMFineReason-2B
               </td>
-              <td>2B</td>
               <td>54.8</td>
               <td>74.6</td>
               <td>45.3</td>
@@ -2046,8 +2044,7 @@
               <td>65.3</td>
             </tr>
             <tr>
-              <td class="model-name">OMR</td>
-              <td>7B</td>
+              <td class="model-name">OpenMMReasoner-7B</td>
               <td>57.8</td>
               <td>79.5</td>
               <td>43.6</td>
@@ -2066,7 +2063,6 @@
             </tr>
             <tr>
               <td class="model-name">HoneyBee-8B</td>
-              <td>8B</td>
               <td>63.1</td>
               <td>71.9</td>
               <td>37.4</td>
@@ -2164,28 +2160,28 @@
                 <td>73.3</td>
                 <td>40.9</td>
                 <td>70.4</td>
-                <td><u>68.7</u></td>
-                <td><u>52.8</u></td>
+                <td>68.7</td>
+                <td>52.8</td>
                 <td>78.5</td>
-                <td><u>92.3</u></td>
+                <td>92.3</td>
                 <td>67.9</td>
                 <td>39.0</td>
-                <td><u>74.1</u></td>
-                <td><u>65.8</u></td>
+                <td>74.1</td>
+                <td>65.8</td>
               </tr>
               <tr class="highlight">
                 <td>MFR-RL</td>
-                <td><b>74.6</b></td>
-                <td><u>45.3</u></td>
-                <td><b>69.2</b></td>
-                <td><b>71.4</b></td>
-                <td><b>53.8</b></td>
-                <td><b>82.5</b></td>
-                <td><b>94.4</b></td>
-                <td><u>68.2</u></td>
-                <td><b>45.4</b></td>
-                <td><b>74.3</b></td>
-                <td><b>67.9</b></td>
+                <td>74.6</td>
+                <td>45.3</td>
+                <td>69.2</td>
+                <td>71.4</td>
+                <td>53.8</td>
+                <td>82.5</td>
+                <td>94.4</td>
+                <td>68.2</td>
+                <td>45.4</td>
+                <td>74.3</td>
+                <td>67.9</td>
               </tr>
               <tr class="section-divider">
                 <td colspan="13" class="model-section">4B Model</td>
@@ -2214,38 +2210,38 @@
                 <td>61.1</td>
                 <td>84.9</td>
                 <td>94.1</td>
-                <td><u>73.2</u></td>
+                <td>73.2</td>
                 <td>50.3</td>
-                <td><u>83.9</u></td>
+                <td>83.9</td>
                 <td>73.7</td>
               </tr>
               <tr class="highlight">
                 <td>MFR-SFT</td>
-                <td><u>80.1</u></td>
-                <td><u>62.4</u></td>
-                <td><u>78.4</u></td>
-                <td><u>79.9</u></td>
-                <td><u>66.7</u></td>
-                <td><u>86.1</u></td>
-                <td><u>96.6</u></td>
+                <td>80.1</td>
+                <td>62.4</td>
+                <td>78.4</td>
+                <td>79.9</td>
+                <td>66.7</td>
+                <td>86.1</td>
+                <td>96.6</td>
                 <td>71.5</td>
-                <td><u>55.9</u></td>
+                <td>55.9</td>
                 <td>87.7</td>
-                <td><u>76.5</u></td>
+                <td>76.5</td>
               </tr>
               <tr class="highlight">
                 <td>MFR-RL</td>
-                <td><b>82.2</b></td>
+                <td>82.2</td>
                 <td>61.3</td>
-                <td><b>78.7</b></td>
-                <td><b>80.6</b></td>
-                <td><b>67.6</b></td>
-                <td><b>86.6</b></td>
+                <td>78.7</td>
+                <td>80.6</td>
+                <td>67.6</td>
+                <td>86.6</td>
                 <td>95.8</td>
-                <td><b>74.9</b></td>
-                <td><b>58.1</b></td>
-                <td><b>87.7</b></td>
-                <td><b>77.4</b></td>
+                <td>74.9</td>
+                <td>58.1</td>
+                <td>87.7</td>
+                <td>77.4</td>
               </tr>
               <tr class="section-divider">
                 <td colspan="13" class="model-section">8B Model</td>
@@ -2259,7 +2255,7 @@
                 <td>67.7</td>
                 <td>55.3</td>
                 <td>85.7</td>
-                <td><u>95.4</u></td>
+                <td>95.4</td>
                 <td>71.5</td>
                 <td>46.4</td>
                 <td>83.0</td>
@@ -2267,7 +2263,7 @@
               </tr>
               <tr>
                 <td>Qwen3-VL-Thinking</td>
-                <td><u>81.4</u></td>
+                <td>81.4</td>
                 <td>62.7</td>
                 <td>77.7</td>
                 <td>73.2</td>
@@ -2282,37 +2278,37 @@
               <tr class="highlight">
                 <td>MFR-SFT</td>
                 <td>81.2</td>
-                <td><u>67.6</u></td>
-                <td><u>82.2</u></td>
-                <td><u>82.6</u></td>
-                <td><u>68.7</u></td>
-                <td><u>86.5</u></td>
-                <td><u>95.4</u></td>
-                <td><u>74.1</u></td>
-                <td><u>58.4</u></td>
-                <td><u>89.9</u></td>
-                <td><u>78.7</u></td>
+                <td>67.6</td>
+                <td>82.2</td>
+                <td>82.6</td>
+                <td>68.7</td>
+                <td>86.5</td>
+                <td>95.4</td>
+                <td>74.1</td>
+                <td>58.4</td>
+                <td>89.9</td>
+                <td>78.7</td>
               </tr>
               <tr class="highlight">
                 <td>MFR-RL</td>
-                <td><b>81.7</b></td>
+                <td>81.7</td>
                 <td>67.1</td>
-                <td><b>81.5</b></td>
-                <td><b>83.4</b></td>
-                <td><b>68.5</b></td>
-                <td><b>87.9</b></td>
-                <td><b>97.5</b></td>
-                <td><b>75.6</b></td>
-                <td><b>60.0</b></td>
-                <td><b>90.8</b></td>
-                <td><b>79.4</b></td>
+                <td>81.5</td>
+                <td>83.4</td>
+                <td>68.5</td>
+                <td>87.9</td>
+                <td>97.5</td>
+                <td>75.6</td>
+                <td>60.0</td>
+                <td>90.8</td>
+                <td>79.4</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div class="results-summary">
           <p>
-            <strong>Key Results:</strong> SFT provides the primary performance boost (+17~20 avg), establishing strong reasoning foundations. RL further refines all models (+3.3~3.8 avg), with consistent improvements across model sizes.
+            <strong>Key Results:</strong> SFT provides the primary performance boost, establishing strong reasoning foundations. RL training significantly improves generalization on general understanding and chart benchmarks.
           </p>
         </div>
       </div>
